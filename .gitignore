@@ -1,0 +1,15 @@
+*.pyc
+__pycache__/
+instance/
+.webassets-cache
+*.db
+*.sqlite
+*.sqlite3
+users.json
+lessons.json
+active_lessons.json
+venv/
+env/
+ENV/
+.env
+.venv
