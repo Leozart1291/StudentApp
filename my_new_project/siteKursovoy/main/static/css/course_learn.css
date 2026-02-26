@@ -1,0 +1,149 @@
+/* ======= Общие стили ======= */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff;
+    color: #333;
+    margin: 0;
+    padding-top: 80px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.2rem;
+    color: #0255a5;
+    margin-bottom: 40px;
+}
+
+/* ======= Модули ======= */
+.modules {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+}
+
+/* ======= Блок модуля ======= */
+.module-block {
+    border: 1px solid #e3e8ef;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    background: #f9fbfd;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.module-block[open] {
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* ======= Заголовок модуля ======= */
+.module-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+    padding: 15px 20px;
+    color: #0255a5;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    list-style: none;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.module-title:hover {
+    background: #0255a5;
+    color: #fff;
+    border-radius: 12px 12px 0 0;
+}
+
+/* Заблокированные модули */
+details[disabled] summary {
+    color: #aaa !important;
+    cursor: not-allowed;
+}
+
+/* ======= Уроки ======= */
+.lesson-list {
+    list-style: none;
+    margin: 0;
+    padding: 10px 25px 20px;
+    background: #fdfdfd;
+    border-top: 1px solid #e3e8ef;
+}
+
+.lesson-list li {
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.lesson-list a {
+    text-decoration: none;
+    color: #0255a5;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.lesson-list a:hover {
+    text-decoration: underline;
+}
+
+/* ======= Тест ======= */
+.test-item {
+    margin-top: 6px;
+    font-size: 0.9rem;
+}
+
+.test-link {
+    color: #0077cc;
+    text-decoration: none;
+    background: #eaf4ff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.test-link:hover {
+    background: #0255a5;
+    color: #fff;
+}
+
+.test-passed {
+    color: #2ecc71;
+    font-weight: 600;
+}
+
+/* ======= Заблокированные модули ======= */
+.locked {
+    color: #888;
+    font-style: italic;
+    padding: 15px 20px;
+    background: #f5f5f5;
+    border-radius: 0 0 12px 12px;
+}
+
+/* ======= Анимация открытия ======= */
+details[open] summary ~ * {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ======= Адаптив ======= */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .module-title {
+        font-size: 1rem;
+        padding: 12px 16px;
+    }
+
+    .lesson-list {
+        padding: 10px 16px 16px;
+    }
+}

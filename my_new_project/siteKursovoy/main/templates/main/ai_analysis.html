@@ -1,0 +1,59 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+{% include "partials/navbar.html" %}
+<style>
+    body{ margin: 100px 80px 0 80px; }
+    .card { padding: 16px; border: 1px solid #ddd; border-radius: 12px; margin: 16px 0; }
+.muted { opacity: .7; }
+.pill { display: inline-block; padding: 8px 12px; border: 1px solid #ddd; border-radius: 999px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.box { border: 1px solid #eee; border-radius: 12px; padding: 12px; }
+.pre { white-space: pre-wrap; margin: 0; font-family: inherit; }
+@media (max-width: 900px) { .grid2 { grid-template-columns: 1fr; } }
+    </style>
+<div class="card">
+  <h2>🤖 Анализ ИИ</h2>
+  <p class="muted">Урок: <b>{{ lesson.title }}</b></p>
+
+  {% if not result %}
+    <p>Сначала пройди тест, чтобы появился анализ.</p>
+  {% else %}
+    <div class="pill">Результат теста: <b>{{ result.score|floatformat:0 }}%</b></div>
+
+    <hr>
+
+    <h3>Вывод</h3>
+    <p>{{ analysis.summary }}</p>
+
+    <div class="grid2">
+      <div class="box">
+        <h4>Сильные стороны</h4>
+        <pre class="pre">{{ analysis.strengths }}</pre>
+      </div>
+      <div class="box">
+        <h4>Слабые стороны</h4>
+        <pre class="pre">{{ analysis.weaknesses }}</pre>
+      </div>
+    </div>
+
+    <div class="box">
+      <h4>Рекомендации</h4>
+      <pre class="pre">{{ analysis.recommendations }}</pre>
+    </div>
+  {% endif %}
+</div>
+</body>
+</html>
+
+
+

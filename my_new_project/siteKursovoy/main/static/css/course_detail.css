@@ -1,0 +1,196 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f6f9fc;
+  margin: 0;
+  color: #1d1d1d;
+  padding: 0;
+}
+
+.course-detail {
+  max-width: 1200px;
+  margin: 80px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+/* Верхний блок: текст слева, фото справа */
+.course-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  align-items: center;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  padding: 35px;
+}
+
+.course-main {
+  flex: 1 1 60%;
+}
+
+.course-main h1 {
+  color: #0255A5;
+  font-size: 2.6rem;
+  margin-bottom: 20px;
+}
+
+.course-main p {
+  color: #555;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+/* Фото справа */
+.course-image {
+  flex: 1 1 35%;
+}
+
+.course-image img {
+  width: 100%;
+  max-width: 300px; /* фото меньше */
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(2,85,165,0.15);
+  transition: transform 0.3s ease;
+}
+
+.course-image img:hover {
+  transform: scale(1.05);
+}
+
+/* Подробное описание курса */
+.course-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.course-section {
+  background: #fff;
+  border-radius: 18px;
+  padding: 35px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  transition: transform 0.3s ease;
+}
+
+.course-section:hover {
+  transform: translateY(-3px);
+}
+
+.course-section h3 {
+  color: #0255A5;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.course-section p {
+  color: #444;
+  line-height: 1.7;
+  margin-bottom: 15px;
+}
+
+.course-section img {
+  width: 100%;
+  border-radius: 14px;
+  margin: 20px 0;
+  box-shadow: 0 8px 20px rgba(2,85,165,0.1);
+}
+
+/* Информация о курсе и кнопка */
+.course-info {
+  display: flex;
+  justify-content: center;
+}
+
+.course-side {
+  flex: 1 1 400px;
+  background: linear-gradient(135deg, #0255A5, #0678C7);
+  border-radius: 20px;
+  padding: 30px;
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(2,85,165,0.2);
+  transition: transform 0.3s ease;
+}
+
+.course-side:hover {
+  transform: translateY(-5px);
+}
+
+.course-side h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.course-side p {
+  margin-bottom: 20px;
+  color: #e0ecfa;
+}
+
+.course-side .btn{
+  background: #fff;
+  color: #0255A5;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+}
+
+.course-side .btn_to_cours {
+  background: #fff;
+  color: #0255A5;
+  padding: 14px 458px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  width: 600px;
+  margin-top: 80px;
+  transition: all 0.3s ease;
+}
+
+.course-side .btn:hover {
+  background: #01457f;
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+.course-side .btn_to_cours:hover {
+  background: #01457f;
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+/* Ссылка назад */
+.back-link {
+  color: #0255A5;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.back-link:hover {
+  color: #013a7a;
+  text-decoration: underline;
+}
+
+/* Адаптив */
+@media (max-width: 900px) {
+  .course-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .course-image {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 20px;
+  }
+}

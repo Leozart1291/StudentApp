@@ -1,0 +1,331 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ lesson.title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0255A5;
+            --primary-dark: #014a8f;
+            --primary-light: #e6f0fa;
+            --text: #333333;
+            --text-light: #666666;
+            --white: #ffffff;
+            --border: 12px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            background: var(--white);
+            color: var(--text);
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .lesson-container {
+            max-width: 1008px;
+            margin: 0 auto;
+            margin-top: 80px;
+            padding: 2rem 1.5rem;
+        }
+
+        .lesson-header {
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+
+        .lesson-title {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .course-info {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .video-container {
+            background: var(--white);
+            border-radius: var(--border);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            height: 500px;
+        }
+
+        {#iframe {#}
+        {#    width: 100%;#}
+        {#    height: 450px;#}
+        {#    display: block;#}
+        {
+        #}#}
+
+        {#video {#}
+        {#    width: 1008px;#}
+        {#    height: 567px;#}
+        {#    display: block;#}
+        {
+        #}#}
+
+
+        video {
+            width: 1008px;
+            height: 567px;
+            display: block;
+        }
+
+        .video-placeholder {
+            height: 567px;
+            background: var(--primary-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .video-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-placeholder p {
+            font-size: 1.2rem;
+            margin: 0;
+            color: var(--text-light);
+        }
+
+        .content-card {
+            background: var(--white);
+            border-radius: var(--border);
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+
+        .content-card p {
+            margin-bottom: 1.5rem;
+        }
+
+        .content-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--border);
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(2, 85, 165, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 1rem 2rem;
+            border-radius: var(--border);
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            width: 100%;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #28a745;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: var(--border);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .lesson-container {
+                padding: 1rem;
+            }
+
+            .lesson-title {
+                font-size: 2rem;
+            }
+
+            iframe {
+                height: 250px;
+            }
+
+            .content-card {
+                padding: 1.5rem;
+            }
+
+            .actions-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    }
+}
+    </style>
+</head>
+<body>
+{% include "partials/AI.html" %}
+    {% include "partials/navbar.html" %}
+
+    <div class="lesson-container">
+        <div class="lesson-header">
+            <h1 class="lesson-title">{{ lesson.title }}</h1>
+            <p class="course-info">Курс: {{ course.title }}</p>
+        </div>
+
+        <div class="video-container">
+           <!-- {% if embed_url %}
+                <iframe src="{{ embed_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            {% else %}
+                <div class="video-placeholder">
+                    <i class="fas fa-video-slash"></i>
+                    <p>Видео недоступно</p>
+                </div>
+                poster="{% static 'images/img.png' %}
+            {% endif %} -->
+
+         <video class="video-placeholder" controls poster="{% static 'images/bg_video.png' %} ">
+        <source src="{{ lesson.video.url }}" type="video/mp4">
+    Ваш браузер не поддерживает видео.
+        </video>
+        </div>
+
+        <div class="content-card">
+            {{ lesson.content|linebreaks }}
+        </div>
+
+        <div class="actions-grid">
+            {% if not lesson_progress.is_completed %}
+                <form method="post" action="{% url 'complete_lesson' course.id lesson.id %}" style="grid-column: 1 / -1;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-check-circle"></i>
+                        Өтілген деп белгілеу
+                    </button>
+                </form>
+            {% else %}
+                <div class="status-badge" style="grid-column: 1 / -1;">
+                    <i class="fas fa-check-circle"></i>
+                    Сабақ аяқталды
+                </div>
+            {% endif %}
+
+            <a href="{% url 'lesson_test' lesson.id %}" class="btn-outline">
+                <i class="fas fa-clipboard-list"></i>
+                Тест өту
+            </a>
+
+            <a href="#" class="btn-outline">
+                <i class="fas fa-arrow-left"></i>
+                Курстарға өту
+            </a>
+        </div>
+    </div>
+
+
+<div class="comments-section" style="max-width: 1000px; margin: 20px auto;">
+    <h3>Комментарийлер</h3>
+
+    {% for comment in comments %}
+    <div class="comment-card" style="
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fafafa;
+    ">
+        <!-- Аватар -->
+        <div class="avatar" style="margin-right: 15px;">
+            {% if comment.user.profile.photo %}
+                <img src="{{ comment.user.profile.photo.url }}" alt="{{ comment.user.username }}" style="width:50px; height:50px; border-radius:50%;">
+            {% else %}
+                <div style="width:50px; height:50px; border-radius:50%; background-color:#ccc;"></div>
+            {% endif %}
+        </div>
+
+        <!-- Имя + текст -->
+        <div class="comment-content" style="flex:1;">
+            <div class="username" style="font-weight:bold; margin-bottom:5px;">
+                {{ comment.user.username }}
+            </div>
+            <div class="text" style="line-height:1.4;">
+                {{ comment.text|linebreaks }}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>Әзірше коммент жоқ. Бірінші бол!</p>
+    {% endfor %}
+
+    <!-- Форма добавления комментария -->
+    <form method="post" style="margin-top:20px;">
+        {% csrf_token %}
+        <textarea name="text" rows="3" placeholder="Комментарий жазыңыз..." required style="width:100%; max-width:1400px; padding:10px; border-radius:5px; border:1px solid #ddd;"></textarea>
+        <button type="submit" style="margin-top:10px; padding:10px 20px; background-color:#4CAF50; color:white; border:none; border-radius:5px; cursor:pointer;">
+            Жіберу
+        </button>
+    </form>
+</div>
+
+
+    <footer>
+        {% include "partials/footer.html" %}
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

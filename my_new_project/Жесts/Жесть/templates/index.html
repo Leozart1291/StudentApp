@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Главная — Жестикуляция{% endblock %}
+
+{% block content %}
+{% if session.user_id and user and user.role == 'teacher' %}
+<!-- Главная страница для учителя -->
+<div class="section-header">
+  <div class="teacher-header">
+      <div>
+          <h2 data-i18n="home_teacher_panel">Панель учителя</h2>
+          <p data-i18n="home_teacher_manage">Управляйте своими уроками</p>
+      </div>
+      <a href="{{ url_for('profile') }}#my-lessons-section" class="btn btn-primary" data-i18n="home_create_lesson">
+          Создать урок
+      </a>
+  </div>
+</div>
+
+{% if active_lesson %}
+<div class="alert alert-success d-flex" style="align-items: center; justify-content: space-between;">
+    <div>
+        <strong data-i18n="home_active_lesson_label">Активный урок:</strong>
+        «{{ active_lesson.title }}»
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('lesson', access_code=active_lesson.access_code) }}"
+           class="btn btn-sm btn-primary" data-i18n="home_go">Перейти</a>
+        <a href="{{ url_for('show_lesson_code', access_code=active_lesson.access_code) }}"
+           class="btn btn-sm btn-secondary" data-i18n="home_qr">QR код</a>
+        <a href="{{ url_for('stop_lesson') }}" class="btn btn-sm btn-danger" data-i18n="home_stop">Остановить</a>
+    </div>
+</div>
+{% endif %}
+
+{% if teacher_lessons %}
+<div class="dashboard-grid">
+    {% for lesson in teacher_lessons %}
+    <div class="card lesson-card">
+        <div style="flex: 1;">
+            <h3>{{ lesson.title }}</h3>
+
+            <p class="lesson-meta">
+                {% if active_lesson and active_lesson.lesson_id == lesson.id %}
+                  <span class="badge badge-teacher" data-i18n="home_running_now">Идёт сейчас</span>
+                {% else %}
+                  <span style="opacity: 0.7;" data-i18n="home_id_prefix">ID:</span> {{ lesson.id }}
+                {% endif %}
+            </p>
+
+            <p>{{ lesson.description[:120] }}{% if lesson.description|length > 120 %}...{% endif %}</p>
+
+            {% if lesson.get('tasks') and lesson.tasks|length > 0 %}
+            <div class="lesson-meta">
+                <span>
+                  {{ lesson.tasks|length }}
+                  <span data-i18n="home_tasks_word">заданий</span>
+                </span>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="mt-4 d-flex gap-2" style="border-top: 1px solid var(--border); padding-top: 1rem;">
+            {% if active_lesson and active_lesson.lesson_id == lesson.id %}
+              <a href="{{ url_for('lesson', access_code=active_lesson.access_code) }}"
+                 class="btn btn-primary" style="flex: 1;" data-i18n="home_go">Перейти</a>
+            {% else %}
+              <a href="{{ url_for('start_lesson', lesson_id=lesson.id) }}"
+                 class="btn btn-primary" style="flex: 1;" data-i18n="home_start">Начать</a>
+
+              <a href="{{ url_for('profile') }}#my-lessons-section"
+                 class="btn btn-secondary" data-i18n="home_edit">Изменить</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card text-center" style="padding: 3rem;">
+    <div style="font-size: 2rem; margin-bottom: 1rem;"></div>
+    <h3 data-i18n="home_no_lessons_title">У вас пока нет уроков</h3>
+    <p data-i18n="home_no_lessons_desc">Создайте свой первый урок, чтобы начать обучение.</p>
+    <a href="{{ url_for('profile') }}#my-lessons-section" class="btn btn-primary mt-4" data-i18n="home_create_lesson">
+      Создать урок
+    </a>
+</div>
+{% endif %}
+
+{% elif session.user_id %}
+<!-- Главная страница для ученика -->
+<div class="hero">
+    <h1>
+      <span data-i18n="home_hi">Привет</span>, {{ session.username }}!
+    </h1>
+
+    <p data-i18n="home_student_hint">
+      Готовы начать изучение языка жестов? Введите код урока, который дал учитель.
+    </p>
+
+    <div class="d-flex" style="justify-content: center; gap: 1rem; margin-top: 2rem;">
+        <a href="{{ url_for('enter_code') }}" class="btn btn-primary btn-lg" data-i18n="home_enter_code">
+            Ввести код урока
+        </a>
+        <a href="{{ url_for('profile') }}" class="btn btn-secondary btn-lg" data-i18n="home_my_profile">
+            Мой профиль
+        </a>
+    </div>
+</div>
+
+<div class="dashboard-grid" style="margin-top: 4rem;">
+    <div class="card text-center">
+        <div style="font-size: 2rem; margin-bottom: 1rem;"></div>
+        <h3 data-i18n="home_by_code_title">Вход по коду</h3>
+        <p data-i18n="home_by_code_desc">Используйте 6-значный код с доски учителя для входа в урок.</p>
+    </div>
+
+    <div class="card text-center">
+        <div style="font-size: 2rem; margin-bottom: 1rem;"></div>
+        <h3 data-i18n="home_by_qr_title">Вход по QR</h3>
+        <p data-i18n="home_by_qr_desc">Отсканируйте QR-код, который покажет учитель на экране.</p>
+    </div>
+
+    <div class="card text-center">
+        <div style="font-size: 2rem; margin-bottom: 1rem;"></div>
+        <h3 data-i18n="home_chat_title">Чат урока</h3>
+        <p data-i18n="home_chat_desc">Общайтесь с учителем и другими учениками в реальном времени.</p>
+    </div>
+</div>
+
+{% else %}
+<!-- Лендинг для гостей -->
+<div class="hero">
+    <h1 data-i18n="home_guest_title">Язык жестов</h1>
+    <p data-i18n="home_guest_desc">
+      Современная платформа для изучения жестового языка. Видео-уроки, распознавание речи и интерактивное обучение.
+    </p>
+
+    <div class="d-flex" style="justify-content: center; gap: 1rem;">
+        <a href="{{ url_for('login') }}" class="btn btn-primary" data-i18n="home_start_learning">Начать обучение</a>
+
+        <a href="#features" class="btn btn-secondary"
+           data-i18n="home_learn_more"
+           onclick="document.getElementById('features').scrollIntoView({behavior: 'smooth'}); return false;">
+           Узнать больше
+        </a>
+    </div>
+</div>
+
+<div id="features" class="dashboard-grid" style="margin-top: 4rem; margin-bottom: 4rem;">
+    <div class="card">
+        <div style="font-size: 2rem; margin-bottom: 1rem; color: var(--primary);"></div>
+        <h3 data-i18n="home_feat_teachers_title">Для учителей</h3>
+        <p data-i18n="home_feat_teachers_desc">
+          Создавайте уроки, генерируйте коды доступа и управляйте классом в реальном времени.
+        </p>
+    </div>
+
+    <div class="card">
+        <div style="font-size: 2rem; margin-bottom: 1rem; color: var(--primary);"></div>
+        <h3 data-i18n="home_feat_ai_title">ИИ Помощник</h3>
+        <p data-i18n="home_feat_ai_desc">
+          Умный перевод речи в жесты и объяснение фраз для лучшего понимания.
+        </p>
+    </div>
+
+    <div class="card">
+        <div style="font-size: 2rem; margin-bottom: 1rem; color: var(--primary);"></div>
+        <h3 data-i18n="home_feat_videos_title">Видео жестов</h3>
+        <p data-i18n="home_feat_videos_desc">
+          База видео-жестов, синхронизированная с ходом урока.
+        </p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}

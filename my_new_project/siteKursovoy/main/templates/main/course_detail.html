@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ course.title }}</title>
+    <link rel="stylesheet" href="{% static 'css/course_detail.css' %}">
+</head>
+<body>
+{% include "partials/AI.html" %}
+{% include "partials/navbar.html" %}
+
+
+
+
+
+<div class="course-detail">
+
+  <!-- Верхний блок: текст слева, фото справа -->
+  <div class="course-header">
+    <div class="course-main">
+      <h1>{{ course.title }}</h1>
+      <p>{{ course.info.description1 }}</p>
+    </div>
+    <div class="course-image">
+      {% if course.info.image1 %}
+        <img src="{{ course.info.image1.url }}" alt="{{ course.title }}">
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Подробное описание курса -->
+  <div class="course-content">
+    <div class="course-section">
+      <h3>Описание курса</h3>
+      <p>{{ course.info.description2 }}</p>
+      {% if course.info.image2 %}
+        <img src="{{ course.info.image2.url }}" alt="{{ course.title }}">
+      {% endif %}
+      <p>{{ course.info.description3 }}</p>
+    </div>
+  </div>
+
+  <!-- Информация о курсе и кнопка -->
+<div class="course-info">
+    <div class="course-side">
+        <h2>Информация о курсе</h2>
+        <p>Автор: {{ course.author }}</p>
+        <p>Продолжительность: {{ course.duration }} часов</p>
+
+        {% if user.is_authenticated %}
+            {% if is_added %}
+                <a href="{% url 'course_learn' course.id %}" class="btn_to_cours">Курсқа өту</a>
+            {% else %}
+                <form method="post" action="{% url 'add_to_my_courses' course.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn">Менің курстарыма қосу</button>
+                </form>
+            {% endif %}
+        {% else %}
+            <a href="{% url 'Login' %}" class="btn">Курсты қосу үшін тіркеліңіз</a>
+        {% endif %}
+    </div>
+</div>
+
+
+
+
+
+</div>
+{% include "partials/footer.html" %}
+<script src="{% static 'JS/index.js' %}"></script>
+</body>
+</html>

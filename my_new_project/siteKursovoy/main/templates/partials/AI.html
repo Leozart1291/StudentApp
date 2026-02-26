@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        /* Floating Circle Button */
+#chat-button {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 60px;
+    height: 60px;
+    background: #4f46e5;
+    color: white;
+    border-radius: 50%;
+    font-size: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    z-index: 9999;
+    transition: 0.3s;
+}
+
+#chat-button:hover {
+    transform: scale(1.1);
+}
+
+/* Chat Window */
+#chat-window {
+    position: fixed;
+    bottom: 100px;
+    right: 25px;
+    width: 320px;
+    height: 430px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 9999;
+}
+
+/* Header */
+#chat-header {
+    background: #4f46e5;
+    color: white;
+    padding: 12px 16px;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Messages */
+#chat-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    background: #f9f9f9;
+}
+
+.chat-message {
+    padding: 8px 12px;
+    margin: 6px 0;
+    max-width: 85%;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.from-user {
+    background: #4f46e5;
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 2px;
+}
+
+.from-ai {
+    background: #e5e7eb;
+    color: black;
+    margin-right: auto;
+    border-bottom-left-radius: 2px;
+}
+
+/* Input area */
+#chat-input-area {
+    display: flex;
+    border-top: 1px solid #ddd;
+}
+
+#chat-input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    outline: none;
+}
+
+#chat-send {
+    width: 50px;
+    border: none;
+    background: #4f46e5;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+}
+/* Typing indicator */
+.typing {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #e5e7eb;
+    color: black;
+    padding: 8px 12px;
+    width: fit-content;
+    border-radius: 10px;
+    margin: 6px 0;
+    border-bottom-left-radius: 2px;
+}
+
+.typing-dot {
+    width: 6px;
+    height: 6px;
+    background: #9ca3af;
+    border-radius: 50%;
+    animation: blink 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes blink {
+    0% { opacity: .2; }
+    20% { opacity: 1; }
+    100% { opacity: .2; }
+}
+
+    </style>
+
+</head>
+<body>
+    <!-- Floating AI Chat Button -->
+<div id="chat-button">
+    💬
+</div>
+
+<!-- Chat Window -->
+<div id="chat-window">
+    <div id="chat-header">
+        <span>AI ассистент</span>
+        <button id="chat-close">✖</button>
+    </div>
+
+    <div id="chat-messages"></div>
+
+    <div id="chat-input-area">
+        <input id="chat-input" type="text" placeholder="Напишите сообщение...">
+        <button id="chat-send">➤</button>
+    </div>
+</div>
+
+
+<script>
+const chatBtn = document.getElementById("chat-button");
+const chatWindow = document.getElementById("chat-window");
+const closeBtn = document.getElementById("chat-close");
+const sendBtn = document.getElementById("chat-send");
+const input = document.getElementById("chat-input");
+const messages = document.getElementById("chat-messages");
+
+chatBtn.onclick = () => chatWindow.style.display = "flex";
+closeBtn.onclick = () => chatWindow.style.display = "none";
+
+function addMessage(text, sender) {
+    let msg = document.createElement("div");
+    msg.classList.add("chat-message");
+    msg.classList.add(sender === "user" ? "from-user" : "from-ai");
+    msg.innerText = text;
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
+}
+
+function showTyping() {
+    let box = document.createElement("div");
+    box.classList.add("typing");
+    box.id = "typing-indicator";
+
+    box.innerHTML = `
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+    `;
+
+    messages.appendChild(box);
+    messages.scrollTop = messages.scrollHeight;
+}
+
+function hideTyping() {
+    let t = document.getElementById("typing-indicator");
+    if (t) t.remove();
+}
+
+sendBtn.onclick = sendMessage;
+input.addEventListener("keypress", e => (e.key === "Enter") && sendMessage());
+
+function sendMessage() {
+    let text = input.value.trim();
+    if (!text) return;
+
+    addMessage(text, "user");
+    input.value = "";
+
+    // Показываем "ИИ печатает..."
+    showTyping();
+
+    fetch("http://127.0.0.1:5050/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ message: text })
+    })
+    .then(response => response.json())
+    .then(data => {
+        hideTyping(); // убираем печать
+        addMessage(data.reply, "ai");
+    })
+    .catch(() => {
+        hideTyping();
+        addMessage("Ошибка соединения", "ai");
+    });
+}
+
+</script>
+
+</body>
+</html>

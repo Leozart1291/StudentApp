@@ -1,0 +1,118 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <title>Басты бет</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+</head>
+
+<body>
+
+<nav>
+    <div class="centr">
+        <div class="ele">
+            <div class="ff">
+                <div class="header-logo">
+                    <div class="brand"><a href="{% url 'index' %}"><img class="logo_img"
+                                                                        src="{% static 'images/StudentApp.png' %}"
+                                                                        alt=""></a>
+                    </div>
+                </div>
+                <div class="nav-container">
+                    <div class="nav-links">
+                        <a href="{% url 'index' %}" class="nav-link active">Басты</a>
+                        <a href="{% url 'courses' %}" class="nav-link">Курстар</a>
+                        <a href="{% url 'Profile' %}" class="nav-link">Профиль</a>
+                        <a href="{% url 'jj' %}" class="nav-link">Уроки</a>
+                        {% if user.is_authenticated and user.profile.role == "teacher" %}
+                            <a href="{% url 'teacher_students_list' %}" class="nav-link">Панель учителя</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-container">
+                {% if user.is_authenticated %}
+                    <div class="ui-menu-container">
+                        <button id="uiMenuBtn" class="ui-btn" type="button" aria-haspopup="true" aria-expanded="false">
+                            ⚙️ Настройки
+                        </button>
+
+                        <div id="uiDropdown" class="ui-dropdown" style="display:none;">
+                            <button type="button" class="ui-row" id="uiDarkBtn">
+                                <span>🌙 Тёмный</span>
+                                <span class="ui-state" id="uiDarkState">OFF</span>
+                            </button>
+
+                            <button type="button" class="ui-row" id="uiContrastBtn">
+                                <span>🔆 Контраст</span>
+                                <span class="ui-state" id="uiContrastState">OFF</span>
+                            </button>
+
+                            <div class="ui-sep"></div>
+
+                            <div class="ui-font">
+                                <button type="button" class="ui-font-btn" data-font="normal">A</button>
+                                <button type="button" class="ui-font-btn" data-font="lg">A+</button>
+                                <button type="button" class="ui-font-btn" data-font="xl">A++</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-menu-container">
+                        <button id="profileBtn" class="btn-white profile-link">
+                            {% if user.profile.photo %}
+                                <img src="{{ user.profile.photo.url }}" alt="Фото профиля" class="avatar">
+                            {% else %}
+                                <img src="{% static 'images/default-avatar.png' %}" alt="Аватар" class="avatar">
+                            {% endif %}
+                            {{ user.username }}
+                        </button>
+
+                        <div id="dropdownMenu" class="dropdown-menu">
+                            <div class="dropdown-header">
+                                {% if user.profile.photo %}
+                                    <img src="{{ user.profile.photo.url }}" alt="Фото профиля" class="menu-avatar">
+                                {% else %}
+                                    <img src="{% static 'images/default-avatar.png' %}" alt="Аватар"
+                                         class="menu-avatar">
+                                {% endif %}
+                                <div class="user-info">
+                                    <strong>{{ user.username }}</strong><br>
+                                    <small>{{ user.email }}</small>
+                                </div>
+                            </div>
+                            <hr>
+                            <a href="{% url 'index' %}">Басты бет</a>
+                            <a href="{% url 'Profile' %}">Менің профилім</a>
+                            <a href="{% url 'profile_settings' %}">Баптаулар</a>
+                            <a href="{% url 'sertificates' %}">Сертификаттар</a>
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button class="vihod" type="submit">Шығу</button>
+                            </form>
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="{% url 'Login' %}" id="authBtn" class="btn-white1">Кіру</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script src="{% static 'JS/index.js' %}"></script>
+</body>
+
+</html>

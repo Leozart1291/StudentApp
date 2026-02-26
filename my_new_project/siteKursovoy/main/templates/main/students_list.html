@@ -1,0 +1,291 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель учителя</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+{% include "partials/navbar.html" %}
+
+<style>
+:root{
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --text:#111827;
+  --muted:#6b7280;
+  --line:rgba(17,24,39,.12);
+  --shadow:0 12px 30px rgba(17,24,39,.08);
+  --radius:18px;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* ===== ОТСТУПЫ 80PX СЛЕВА И СПРАВА ===== */
+.teacher-container{
+  padding:120px 80px 60px;
+}
+
+/* ===== 2 БЛОКА ===== */
+.teacher-layout{
+  display:grid;
+  grid-template-columns: 300px 1fr; /* левый меньше */
+  gap:24px;
+  align-items:start;
+}
+
+/* ===== ЛЕВАЯ КАРТОЧКА ===== */
+.left-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.left-card__header{
+  padding:18px;
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg, rgba(99,102,241,.08), transparent);
+}
+
+.left-card__title{
+  margin:0;
+  font-weight:800;
+  font-size:16px;
+}
+
+.left-card__sub{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.left-card__body{
+  padding:18px;
+  display:grid;
+  gap:12px;
+}
+
+.left-card .btn{
+  width:100%;
+  border-radius:12px;
+  font-weight:600;
+  padding:10px;
+}
+
+/* ===== ПРАВАЯ КАРТОЧКА ===== */
+.right-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.right-card__header{
+  padding:22px;
+  border-bottom:1px solid var(--line);
+}
+
+.right-title{
+  margin:0;
+  font-weight:800;
+  font-size:22px;
+}
+
+.right-sub{
+  margin-top:6px;
+  font-size:14px;
+  color:var(--muted);
+}
+
+.searchbox{
+  margin-top:16px;
+  position:relative;
+}
+
+.searchbox i{
+  position:absolute;
+  left:12px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--muted);
+}
+
+.searchbox input{
+  width:100%;
+  padding:10px 12px 10px 34px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  outline:none;
+}
+
+.searchbox input:focus{
+  border-color:#6366f1;
+  box-shadow:0 0 0 3px rgba(99,102,241,.2);
+}
+
+/* ===== СПИСОК УЧЕНИКОВ ===== */
+.students{
+  padding:20px;
+  display:grid;
+  gap:12px;
+}
+
+.student{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 16px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  text-decoration:none;
+  color:inherit;
+  transition:.15s;
+}
+
+.student:hover{
+  box-shadow:0 6px 16px rgba(0,0,0,.06);
+  transform:translateY(-2px);
+}
+
+.student-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.avatar{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  background:rgba(99,102,241,.15);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.avatar i{
+  color:#6366f1;
+}
+
+.student-name{
+  font-weight:700;
+}
+
+.student-meta{
+  font-size:12px;
+  color:var(--muted);
+}
+
+.arrow{
+  color:var(--muted);
+}
+
+/* ===== АДАПТИВ ===== */
+@media(max-width:1000px){
+  .teacher-layout{
+    grid-template-columns:1fr;
+  }
+
+  .teacher-container{
+    padding:100px 20px 40px;
+  }
+}
+</style>
+
+
+<div class="teacher-container">
+  <div class="teacher-layout">
+
+    <!-- ЛЕВЫЙ БЛОК -->
+    <section class="left-card">
+      <div class="left-card__header">
+        <h3 class="left-card__title">Управление курсами</h3>
+        <div class="left-card__sub">Добавление и редактирование</div>
+      </div>
+
+      <div class="left-card__body">
+        <a href="{% url 'course_create' %}" class="btn btn-primary">
+          <i class="fa-solid fa-plus me-2"></i> Добавить курс
+        </a>
+
+        <a href="{% url 'course_edit_list' %}" class="btn btn-outline-primary">
+          <i class="fa-solid fa-pen-to-square me-2"></i> Редактировать курс
+        </a>
+
+        <a href="{% url 'jj' %}" class="btn btn-success">
+          <i class="fa-solid fa-book-open me-2"></i> Добавить урок
+        </a>
+      </div>
+    </section>
+
+
+    <!-- ПРАВЫЙ БЛОК -->
+    <section class="right-card">
+      <div class="right-card__header">
+        <h2 class="right-title">Панель учителя</h2>
+        <div class="right-sub">Список всех учеников</div>
+
+        <div class="searchbox">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="studentSearch" type="text" placeholder="Поиск ученика...">
+        </div>
+      </div>
+
+      <div class="students" id="studentsList">
+        {% for st in students %}
+        <a href="{% url 'teacher_student_detail' st.id %}" class="student">
+          <div class="student-left">
+            <div class="avatar">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div>
+              <div class="student-name">{{ st.username }}</div>
+              <div class="student-meta">ID: {{ st.id }}</div>
+            </div>
+          </div>
+
+          <i class="fa-solid fa-chevron-right arrow"></i>
+        </a>
+        {% empty %}
+        <div class="student-meta">Учеников нет</div>
+        {% endfor %}
+      </div>
+    </section>
+
+  </div>
+</div>
+
+
+{% include "partials/footer.html" %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+const search = document.getElementById('studentSearch');
+const list = document.getElementById('studentsList');
+
+if(search){
+  search.addEventListener('input', function(){
+    const q = this.value.toLowerCase();
+    list.querySelectorAll('.student').forEach(el=>{
+      const name = el.querySelector('.student-name').innerText.toLowerCase();
+      el.style.display = name.includes(q) ? '' : 'none';
+    });
+  });
+}
+</script>
+
+</body>
+</html>

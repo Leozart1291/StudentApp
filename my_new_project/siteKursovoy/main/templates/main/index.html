@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudentApp — Басты бет</title>
+
+  <link rel="stylesheet" href="{% static 'css/index.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  {% include "partials/navbar.html" %}
+  {% include "partials/AI.html" %}
+
+  <main class="page">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="containerf hero__grid">
+
+        <div class="hero__left">
+          <h1 class="hero__title">
+            Әр сабақ — барша <br>
+            студентке түсінікті
+          </h1>
+
+          <p class="hero__desc">
+            Жасанды интеллект арқылы онлайн сабақтарды субтитр және жест тіліне аударып,
+            есту қабілеті бұзылған студенттерге білімді толық түсінуге мүмкіндік береміз.
+          </p>
+
+          <a class="btn btn--primary" href="{% url 'courses' %}">
+            Курстарға өту
+          </a>
+        </div>
+
+        <div class="hero__right">
+          <img class="hero__img"
+     id="heroImage"
+     src="{% static 'images/hero_light.png' %}"
+     alt="StudentApp illustration">
+        </div>
+
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how">
+      <div class="container">
+        <h2 class="how__title">StudentApp қалай жұмыс істейді?</h2>
+
+        <div class="how__grid">
+          <article class="card">
+            <div class="card__icon">
+              <img src="{% static 'images/online.png' %}" alt="">
+            </div>
+            <h3 class="card__title">Онлайн сабақ</h3>
+            <p class="card__text">
+              Мұғалім сабақ жүргізеді, студенттер сілтеме арқылы қосылады.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card__icon">
+              <img src="{% static 'images/subtitles.png' %}" alt="">
+            </div>
+            <h3 class="card__title">AI субтитр</h3>
+            <p class="card__text">
+              Мұғалімнің сөзі автоматты түрде мәтінге айналады.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card__icon">
+              <img src="{% static 'images/sign.png' %}" alt="">
+            </div>
+            <h3 class="card__title">Жест тілі</h3>
+            <p class="card__text">
+              Айтылған сөздер видео арқылы жест тіліне аударылады.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  {% include "partials/footer.html" %}
+
+  <script src="{% static 'JS/index.js' %}"></script>
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+  updateHeroImage();
+});
+  </script>
+</body>
+</html>

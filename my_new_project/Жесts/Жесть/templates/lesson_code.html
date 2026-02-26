@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Код урока — {{ lesson.title }}{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin-top: 2rem;">
+    <div class="card text-center" style="padding: 3rem;">
+        <div class="auth-header">
+            <h2>Подключение к уроку</h2>
+            <p style="font-size: 1.2rem;">«{{ lesson.title }}»</p>
+        </div>
+
+        <div class="d-flex"
+            style="flex-direction: column; gap: 2rem; align-items: center; justify-content: center; margin: 2rem 0; @media(min-width: 768px) { flex-direction: row; }">
+
+            <!-- CODE SECTION -->
+            <div style="flex: 1; min-width: 250px;">
+                <p
+                    style="text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 0.5rem;">
+                    Код доступа</p>
+                <div id="codeValue"
+                    style="font-size: 4rem; font-weight: 800; color: var(--primary); letter-spacing: 0.5rem; line-height: 1;">
+                    {{ access_code }}
+                </div>
+                <button type="button" class="btn btn-sm btn-secondary mt-3" onclick="copyCode()">
+                    Копировать
+                </button>
+            </div>
+
+            <div
+                style="width: 1px; height: 150px; background: var(--border); display: none; @media(min-width: 768px) { display: block; }">
+            </div>
+
+            <!-- QR SECTION -->
+            <div style="flex: 1; min-width: 250px;">
+                <p
+                    style="text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 0.5rem;">
+                    QR-код</p>
+                <div
+                    style="background: white; padding: 1rem; border-radius: 1rem; display: inline-block; border: 1px solid var(--border);">
+                    <img src="{{ url_for('qr_code', access_code=access_code) }}" alt="QR Code" id="qrImage"
+                        style="width: 150px; height: 150px; object-fit: contain;">
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">Сканируйте камерой</p>
+            </div>
+        </div>
+
+        <!-- URL SECTION -->
+        <div
+            style="max-width: 500px; margin: 0 auto; background: var(--bg-body); padding: 1rem; border-radius: var(--radius-md); display: flex; align-items: center; gap: 0.5rem;">
+            <input type="text" value="{{ lesson_url }}" readonly id="lessonUrl"
+                style="flex: 1; border: none; background: transparent; font-family: monospace; color: var(--text);">
+            <button type="button" class="btn btn-sm btn-primary" id="copyUrlBtn">Копировать</button>
+        </div>
+
+        <div class="mt-4 d-flex justify-content-center gap-2">
+            <a href="{{ url_for('lesson', access_code=access_code) }}" class="btn btn-primary btn-lg">
+                Начать урок
+            </a>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary btn-lg">
+                На главную
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="toast"
+    style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 20px; opacity: 0; transition: opacity 0.3s; pointer-events: none;">
+    Скопировано!
+</div>
+
+<script>
+    function showToast() {
+        const toast = document.getElementById('toast');
+        toast.style.opacity = '1';
+        setTimeout(() => toast.style.opacity = '0', 2000);
+    }
+
+    function copyCode() {
+        const code = document.getElementById('codeValue').textContent.trim();
+        navigator.clipboard.writeText(code).then(showToast);
+    }
+
+    document.getElementById('copyUrlBtn').addEventListener('click', function () {
+        const urlInput = document.getElementById('lessonUrl');
+        urlInput.select();
+        navigator.clipboard.writeText(urlInput.value).then(showToast);
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,1393 @@
+/* ==========================================================
+   GESTURE LEARNING PLATFORM — SINGLE CONTROLLABLE STYLESHEET
+   Все цвета/размеры меняются в Design Tokens ниже.
+   ========================================================== */
+
+/* =========================
+   1) DESIGN TOKENS (CONTROL PANEL)
+   ========================= */
+:root{
+  /* GLOBAL SCALE */
+  --font-scale: 1;      /* 1 = normal, 1.1 = bigger, 0.95 = smaller */
+  --space: 1;           /* 1 = normal spacing (можно оставить) */
+
+  /* FONTS */
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-alt: 'Montserrat', sans-serif;
+
+  /* RADII */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 18px;
+  --r-xl: 22px;
+  --pill: 999px;
+
+  /* SHADOWS */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.06);
+  --shadow-md: 0 8px 22px rgba(0,0,0,.10);
+  --shadow-lg: 0 12px 35px rgba(0,0,0,.12);
+
+  /* COLORS (LIGHT default) */
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-2: #fbfcff;
+
+  --text: #0f172a;
+  --muted: #64748b;
+  --muted-2: #94a3b8;
+
+  --border: rgba(15,23,42,.12);
+
+  /* BRAND */
+  --brand: #0255A5;
+  --brand-2: #368fe6;
+  --brand-contrast: #ffffff;
+
+  /* STATUS */
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+
+  /* NAV */
+  --nav-bg: rgba(255,255,255,0.70);
+  --nav-blur: 8px;
+  --nav-shadow: 0 0 10px 1px rgba(0,0,0,.25);
+
+  --link: #4D4D4D;
+  --link-active: #404040;
+  --link-hover: var(--brand);
+
+  /* MENUS / DROPDOWNS */
+  --menu-bg: var(--surface);
+  --menu-text: var(--text);
+  --menu-border: var(--border);
+  --menu-hover: rgba(2,85,165,.08);
+
+  /* BUTTONS */
+  --btn-bg: rgba(2,85,165,0.90);
+  --btn-bg-hover: #0255A5;
+
+  /* CHAT */
+  --chat-bg: #f7f9fc;
+  --chat-bubble: #ffffff;
+  --chat-bubble-border: rgba(15,23,42,.10);
+  --chat-mine: linear-gradient(135deg,#1d4ed8,#2563eb);
+
+  /* SUBTITLES */
+  --sub-bg: var(--surface);
+  --sub-border: rgba(229,233,242,1);
+  --sub-shadow: 0 10px 30px rgba(15, 23, 42, .08);
+}
+
+/* DARK THEME (only tokens) */
+body.theme-dark{
+  --bg: #121212;
+  --surface: #1a1a1a;
+  --surface-2: #151515;
+
+  --text: #f2f2f2;
+  --muted: rgba(242,242,242,.75);
+  --muted-2: rgba(242,242,242,.55);
+
+  --border: rgba(255,255,255,.14);
+
+  --nav-bg: rgba(18,18,18,0.75);
+  --nav-shadow: 0 0 10px 1px rgba(0,0,0,.55);
+
+  --link: #f2f2f2;
+  --link-active: #ffffff;
+  --link-hover: #ffffff;
+
+  --menu-bg: #1a1a1a;
+  --menu-text: #f2f2f2;
+  --menu-border: rgba(255,255,255,.14);
+  --menu-hover: rgba(255,255,255,.08);
+
+  --btn-bg: rgba(2,85,165,0.95);
+  --btn-bg-hover: rgba(2,85,165,1);
+
+  --chat-bg: #111;
+  --chat-bubble: #1b1b1b;
+  --chat-bubble-border: rgba(255,255,255,.14);
+
+  --sub-bg: #1a1a1a;
+  --sub-border: rgba(255,255,255,.14);
+  --sub-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+/* CONTRAST THEME (black + yellow) */
+body.theme-contrast{
+  --bg: #000000;
+  --surface: #000000;
+  --surface-2: #000000;
+
+  --text: #ffff00;
+  --muted: #ffff00;
+  --muted-2: #ffff00;
+
+  --border: #ffff00;
+
+  --brand: #ffff00;
+  --brand-contrast: #000000;
+
+  --nav-bg: #000000;
+  --nav-shadow: none;
+
+  --link: #ffff00;
+  --link-active: #ffff00;
+  --link-hover: #ffff00;
+
+  --menu-bg: #000000;
+  --menu-text: #ffff00;
+  --menu-border: #ffff00;
+  --menu-hover: #000000;
+
+  --btn-bg: #000000;
+  --btn-bg-hover: #000000;
+
+  --chat-bg: #000000;
+  --chat-bubble: #000000;
+  --chat-bubble-border: #ffff00;
+
+  --sub-bg: #000000;
+  --sub-border: #ffff00;
+  --sub-shadow: none;
+}
+
+/* =========================
+   2) RESET + BASE
+   ========================= */
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ font-size: calc(16px * var(--font-scale)); }
+
+body{
+  font-family: var(--font-main);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  /* у тебя nav fixed */
+  margin: 100px 0 0 0;
+}
+
+a{ text-decoration:none; color: inherit; transition: .2s ease; }
+ul{ list-style:none; }
+button, input, textarea, select{ font-family: inherit; font-size: 1rem; }
+
+/* Typography */
+h1,h2,h3,h4,h5,h6{ font-weight:800; line-height:1.2; color: var(--text); }
+p{ color: var(--muted); }
+
+/* Utility (если нужно) */
+.text-center{ text-align:center; }
+.d-flex{ display:flex; }
+.gap-2{ gap: .5rem; }
+.mb-4{ margin-bottom: 1rem; }
+.mt-4{ margin-top: 1rem; }
+
+/* =========================
+   3) LAYOUT CONTAINER
+   ========================= */
+.container{
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2rem 1.5rem;
+  flex: 1;
+}
+
+/* =========================
+   4) BUTTONS / CARDS / FORMS
+   ========================= */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.5rem;
+  padding:.75rem 1.5rem;
+  border-radius: var(--r-md);
+  font-weight: 700;
+  cursor:pointer;
+  border: 1px solid transparent;
+  transition: .2s ease;
+}
+
+.btn-primary{
+  background: var(--brand);
+  color: var(--brand-contrast);
+}
+.btn-primary:hover{
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary{
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+.btn-secondary:hover{ background: var(--surface-2); }
+
+.btn-danger{ background: var(--danger); color: #fff; }
+.btn-danger:hover{ filter: brightness(.92); }
+
+.btn-sm{ padding:.5rem 1rem; font-size:.875rem; border-radius: var(--r-sm); }
+
+.card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+  transition: .2s ease;
+}
+.card:hover{ box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+.form-group{ margin-bottom: 1.25rem; }
+label{ display:block; margin-bottom:.5rem; font-weight:700; color: var(--text); }
+.form-control{
+  width:100%;
+  padding:.75rem 1rem;
+  border:1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--text);
+  transition: .2s ease;
+}
+.form-control:focus{
+  outline:none;
+  border-color: rgba(2,85,165,.45);
+  box-shadow: 0 0 0 4px rgba(2,85,165,.12);
+}
+
+/* Alerts */
+.alert{
+  padding: 1rem;
+  border-radius: var(--r-md);
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+.alert-success{ border-color: rgba(34,197,94,.35); }
+.alert-danger{ border-color: rgba(239,68,68,.35); }
+.alert-warning{ border-color: rgba(245,158,11,.35); }
+.alert-info{ border-color: rgba(2,85,165,.35); }
+
+/* =========================
+   5) NAV (your structure: nav > .centr > .ele ...)
+   ========================= */
+nav{
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  z-index: 40;
+
+  background: var(--nav-bg);
+  backdrop-filter: blur(var(--nav-blur));
+  box-shadow: var(--nav-shadow);
+  border-bottom: 1px solid var(--border);
+}
+
+.centr{
+  max-width: 1468px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 640px){
+  .centr{ padding-left: 1.5rem; padding-right: 1.5rem; }
+}
+@media (min-width: 1024px){
+  .centr{ padding-left: 2rem; padding-right: 2rem; }
+}
+
+.ele{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  height: 80px;
+}
+
+.ff{
+  display:flex;
+  flex-direction: row;
+  gap: 40px;
+  align-items:center;
+}
+
+.header-logo{ display:flex; align-items:center; margin-top: 8px; }
+.logo_img{ width: 150px; display:block; }
+
+.nav-container{ display:none; }
+@media (min-width: 768px){
+  .nav-container{ display:block; margin-left: 2.5rem; }
+}
+
+.nav-links{
+  display:flex;
+  align-items: baseline;
+  gap: 2rem;
+}
+
+.nav-links a{ margin:0; padding-top: 12px; }
+
+.nav-link{
+  color: var(--link);
+  padding: .5rem .75rem;
+  border-radius: .375rem;
+  font-size: .875rem;
+  font-weight: 700;
+  transition: .2s ease;
+}
+.nav-link.active{
+  color: var(--link-active);
+}
+.nav-link:hover{
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+.nav-link:active{ opacity: .85; }
+
+/* Right buttons */
+.button-container{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 1rem;
+  padding:0;
+  margin:0;
+}
+
+/* Auth button */
+.btn-white1{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width: 140px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: var(--pill);
+  background: var(--btn-bg);
+  color: var(--brand-contrast);
+  box-shadow: var(--shadow-sm);
+  font-weight: 800;
+}
+.btn-white1:hover{ background: var(--btn-bg-hover); }
+
+/* Profile button */
+.profile-menu-container{ position: relative; display:inline-block; }
+.btn-white{
+  display:inline-flex;
+  align-items:center;
+  gap: 12px;
+  min-width: 140px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: var(--pill);
+  border: 0;
+  cursor:pointer;
+
+  background: var(--btn-bg);
+  color: var(--brand-contrast);
+  box-shadow: var(--shadow-sm);
+  font-weight: 800;
+}
+.btn-white:hover{ background: var(--btn-bg-hover); }
+
+.avatar{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.85);
+  object-fit: cover;
+}
+
+/* Profile dropdown */
+.dropdown-menu{
+  display:none;
+  position:absolute;
+  top: 45px;
+  right: 0;
+
+  background: var(--menu-bg);
+  color: var(--menu-text);
+  border: 1px solid var(--menu-border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-md);
+  min-width: 220px;
+  z-index: 999;
+  overflow:hidden;
+}
+.dropdown-menu.open{ display:block; } /* IMPORTANT for your HTML */
+
+.dropdown-menu a{
+  display:block;
+  padding: 10px 15px;
+  color: var(--menu-text);
+}
+.dropdown-menu a:hover{ background: var(--menu-hover); }
+
+.dropdown-header{
+  display:flex;
+  align-items:center;
+  padding: 10px;
+}
+.menu-avatar{
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+.user-info{ display:flex; flex-direction:column; }
+
+.vihod{
+  margin-left: 10px;
+  margin-bottom: 10px;
+  margin-top: 5px;
+  border: none;
+  background: transparent;
+  color: var(--menu-text);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+/* =========================
+   6) UI SETTINGS (if you added it)
+   ========================= */
+.ui-menu-container{ position: relative; }
+
+.ui-btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  height: 42px;
+  padding: 0 16px;
+  border-radius: var(--pill);
+
+  border: 2px solid rgba(255,255,255,0.55);
+  background: var(--btn-bg);
+  color: var(--brand-contrast);
+
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+.ui-btn:hover{ background: var(--btn-bg-hover); }
+
+.ui-dropdown{
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: 240px;
+
+  border-radius: var(--r-lg);
+  border: 1px solid var(--menu-border);
+  background: var(--menu-bg);
+  color: var(--menu-text);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  z-index: 9999;
+}
+
+.ui-row{
+  width: 100%;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--menu-text);
+  font-weight: 800;
+}
+.ui-row:hover{ background: var(--menu-hover); }
+
+.ui-state{ font-size: 12px; opacity: .75; font-weight: 900; }
+
+.ui-sep{ height: 1px; background: var(--menu-border); }
+
+.ui-font{
+  display:flex;
+  gap:8px;
+  padding: 12px 14px;
+}
+.ui-font-btn{
+  flex:1;
+  border: 1px solid var(--menu-border);
+  background: transparent;
+  color: var(--menu-text);
+  border-radius: 10px;
+  padding: 8px 0;
+  cursor: pointer;
+  font-weight: 900;
+}
+.ui-font-btn:hover{ background: var(--menu-hover); }
+
+/* Font sizes by classes (your JS may use them) */
+body.font-lg{ --font-scale: 1.10; }
+body.font-xl{ --font-scale: 1.20; }
+
+/* =========================
+   7) LESSONS GRID (Мои уроки)
+   ========================= */
+.lessons-wrapper{
+  width: min(1200px, 100%);
+  margin: 60px auto;
+  padding: calc(20px * var(--space)) 20px;
+}
+
+.lessons-title{
+  font-size: 32px;
+  font-weight: 900;
+  margin-bottom: 30px;
+  color: var(--text);
+}
+
+.lessons-grid{
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.lesson-card{
+  background: var(--surface);
+  border: 2px solid var(--brand);
+  border-radius: var(--r-lg);
+  padding: 22px;
+
+  display:flex;
+  flex-direction: column;
+  min-height: 170px;
+  box-shadow: var(--shadow-sm);
+}
+
+.lesson-title{
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.lesson-description{
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+.lesson-footer{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+.lesson-count{
+  background: var(--brand);
+  color: var(--brand-contrast);
+  padding: 8px 16px;
+  border-radius: var(--pill);
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.lesson-edit-btn{
+  border: 2px solid var(--brand);
+  background: transparent;
+  color: var(--brand);
+  padding: 8px 18px;
+  border-radius: var(--pill);
+  font-weight: 900;
+  cursor: pointer;
+}
+.lesson-edit-btn:hover{
+  background: rgba(2,85,165,.08);
+}
+
+.lesson-add-wrapper{
+  display:flex;
+  justify-content:flex-end;
+  margin-top: 40px;
+}
+.lesson-add-btn{
+  background: var(--brand);
+  color: var(--brand-contrast);
+  padding: 14px 24px;
+  border: none;
+  border-radius: var(--r-md);
+  font-weight: 900;
+  cursor:pointer;
+  box-shadow: var(--shadow-sm);
+}
+.lesson-add-btn:hover{ box-shadow: var(--shadow-md); transform: translateY(-1px); }
+
+/* editing mode helpers */
+.lesson-card.is-editing{ grid-column: 1 / -1; padding: 28px; }
+.lessons-grid.is-editing .lesson-card:not(.is-editing){
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+/* =========================
+   8) LESSON ROOM (camera + gesture + subtitles + sidebar)
+   ========================= */
+.lesson-room{
+  display:grid;
+  grid-template-columns: 1fr 350px;
+  gap: 1.5rem;
+  height: calc(100vh - 100px);
+}
+@media (max-width: 1024px){
+  .lesson-room{ grid-template-columns: 1fr; height: auto; }
+}
+
+.cameraflex{
+  display:flex;
+  flex-direction: row;
+  justify-content:center;
+  gap: 40px;
+}
+
+/* video/gesture blocks */
+.main-video-container,
+.gesture-card{
+  width: 300px;
+  height: 300px;
+  border-radius: var(--r-lg);
+  overflow:hidden;
+  background: #000;
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+
+.teacher-video-wrap{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.camera-placeholder{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  background:#000;
+  color:#fff;
+}
+.teacher-video-el,
+.teacher-frame-img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position:absolute;
+  inset:0;
+}
+.teacher-video-el{ display:none; }
+
+.gesture-card .gesture-video-player{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit: contain;
+  display:none;
+}
+.gesture-content{
+  text-align:center;
+  padding: 1rem;
+  color: #fff;
+}
+#word-display{ font-size: 1.25rem; font-weight: 900; margin-bottom: .5rem; }
+#gesture-display{ font-size: 3rem; }
+
+/* Subtitles block (clean + controllable) */
+.subtitles-fixed{
+  margin-top: 20px;
+  padding: 16px 18px;
+  border-radius: var(--r-lg);
+  background: var(--sub-bg);
+  border: 1px solid var(--sub-border);
+  box-shadow: var(--sub-shadow);
+
+  position: sticky;
+  top: 95px;
+  z-index: 20;
+
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.subtitles-fixed .subtitles-header{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.subtitles-fixed .subtitles-header h4{
+  margin:0;
+  font-weight: 900;
+  font-size: 1.15rem;
+  color: var(--text);
+}
+
+.subtitles-fixed .subtitles-content{ display:block; }
+
+.subtitles-fixed #subtitles-text{
+  display:block;
+  color: var(--muted);
+  line-height: 1.4;
+  min-height: 22px;
+  margin-bottom: 6px;
+}
+
+.subtitles-fixed small{
+  display:block;
+  margin:0 !important;
+  color: var(--muted-2) !important;
+  font-size: .75rem;
+}
+
+/* Highlight current word */
+.current-word{
+  background: #3b82f6;
+  color: #fff;
+  padding: 0 3px;
+  border-radius: 3px;
+}
+
+/* =========================
+   9) SIDEBAR + CHAT
+   ========================= */
+.lesson-sidebar{
+  display:flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  overflow:hidden;
+
+  /* если у тебя фиксировали sidebar — лучше sticky, а не fixed */
+  position: sticky;
+  top: 100px;
+  align-self: flex-start;
+}
+
+/* chat box */
+.chat-container{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow:hidden;
+  box-shadow: var(--shadow-lg);
+
+  display:flex;
+  flex-direction: column;
+  height: 72vh;
+  min-height: 520px;
+}
+
+.chat-header{
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  color: var(--text);
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.chat-messages{
+  flex: 1;
+  padding: 14px 14px 10px;
+  overflow-y:auto;
+  background: var(--chat-bg);
+}
+
+/* Scrollbar */
+.chat-messages::-webkit-scrollbar{ width:10px; }
+.chat-messages::-webkit-scrollbar-thumb{
+  background: rgba(17,24,39,.15);
+  border-radius: var(--pill);
+  border:3px solid transparent;
+  background-clip: content-box;
+}
+
+/* Messages (works even if your JS uses direct children) */
+.chat-messages .message,
+#chatMessages > *{
+  max-width: 78%;
+  margin: 10px 0;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--chat-bubble-border);
+  background: var(--chat-bubble);
+  box-shadow: 0 8px 18px rgba(16,24,40,.06);
+  word-break: break-word;
+  white-space: pre-wrap;
+  color: var(--text);
+}
+
+/* Mine messages (if you have .mine/.me) */
+#chatMessages .mine,
+#chatMessages .me{
+  margin-left:auto;
+  background: var(--chat-mine) !important;
+  color: #fff !important;
+  border: 0 !important;
+}
+#chatMessages .mine *,
+#chatMessages .me *{ color: inherit !important; }
+
+.message-input{
+  display:grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  padding: 12px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+#messageInput{
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+  background: var(--surface);
+  color: var(--text);
+}
+#messageInput:focus{
+  border-color: rgba(37,99,235,.55);
+  outline:none;
+  box-shadow: 0 0 0 4px rgba(37,99,235,.12);
+}
+
+#sendButton{
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-weight: 900;
+}
+
+/* students panel (optional) */
+#studentsPanel{
+  padding: 12px 16px !important;
+  background: var(--surface-2) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+#studentsPanel h5{
+  margin: 4px 0 10px;
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--text);
+}
+#studentsList{
+  display:flex;
+  flex-direction: column;
+  gap: 8px;
+}
+#studentsList > *{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 800;
+  font-size: 14px;
+}
+#studentsList > *::before{
+  content:"";
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(2,85,165,.12);
+  flex: 0 0 auto;
+}
+
+/* =========================
+   10) CONTRAST hardening (optional but safe)
+   ========================= */
+body.theme-contrast *{
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+body.theme-contrast .btn-white,
+body.theme-contrast .btn-white1,
+body.theme-contrast .dropdown-menu,
+body.theme-contrast .ui-dropdown,
+body.theme-contrast .chat-container,
+body.theme-contrast .card{
+  background: #000 !important;
+}
+body.theme-contrast .dropdown-menu a:hover,
+body.theme-contrast .ui-row:hover{
+  background: #000 !important;
+  text-decoration: underline;
+}
+
+
+/* === Camera/Gesture border in all themes === */
+.main-video-container,
+.gesture-card{
+  border: 2px solid var(--border);
+}
+
+/* в контрасте бордер строго жёлтый */
+body.theme-contrast .main-video-container,
+body.theme-contrast .gesture-card{
+  border-color: #ff0 !important;
+}
+
+/* === Camera box border (all themes) === */
+.main-video-container{
+  border: 2px solid var(--border);
+  border-radius: var(--r-lg, 18px);
+  overflow: hidden;
+}
+
+/* Camera controls: ONLY style, no hide/show logic */
+#cameraControls.camera-controls{
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,.6);
+  padding: 8px 10px;
+  border-radius: var(--pill);
+  gap: 10px;
+  align-items: center;
+}
+
+/* Важно: display НЕ задаём. Им управляет JS. */
+
+/* Contrast: yellow border */
+body.theme-contrast .main-video-container{
+  border-color: #ff0 !important;
+}
+
+/* ===== Contrast fixes: yellow bg -> black text ===== */
+body.theme-contrast .btn-primary,
+body.theme-contrast .lesson-count,
+body.theme-contrast .current-word{
+  background: #ff0 !important;
+  color: #000 !important;
+}
+body.theme-contrast .btn-primary *,
+body.theme-contrast .lesson-count *,
+body.theme-contrast .current-word *{
+  color: #000 !important;
+}
+
+/* subtitles button too */
+body.theme-contrast #startSpeechBtnSubtitle{
+  background: #ff0 !important;
+  color: #000 !important;
+}
+body.theme-contrast #startSpeechBtnSubtitle *{
+  color: #000 !important;
+}
+
+/* keep blocks black */
+body.theme-contrast .subtitles-fixed,
+body.theme-contrast .chat-container,
+body.theme-contrast .dropdown-menu,
+body.theme-contrast .ui-dropdown,
+body.theme-contrast .card{
+  background: #000 !important;
+}
+
+/* === CAMERA CONTROLS VISIBILITY (FIX) === */
+#cameraControls{
+  display: none;                 /* скрыто всегда по умолчанию */
+}
+
+/* показываем ТОЛЬКО когда камера включена */
+.main-video-container.camera-on #cameraControls{
+  display: flex;
+}
+
+/* если placeholder виден — controls точно не показывать */
+#cameraPlaceholder:not([style*="display: none"]) ~ #cameraControls{
+  display: none !important;
+}
+
+/* === CONTRAST: make danger buttons yellow/black too === */
+body.theme-contrast .btn-danger{
+  background: #ff0 !important;
+  color: #000 !important;
+  border-color: #ff0 !important;
+}
+body.theme-contrast .btn-danger *{
+  color: #000 !important;
+}
+
+
+/* Center placeholder text inside gesture card */
+.gesture-card{
+  display: flex;
+  align-items: center;   /* по вертикали */
+  justify-content: center; /* по горизонтали */
+}
+
+.gesture-content{
+  width: 100%;
+  text-align: center;
+}
+
+/* === Perfect center for gesture text === */
+.gesture-card{
+  display: flex;
+  align-items: center;     /* вертикаль */
+  justify-content: center; /* горизонталь */
+}
+
+.gesture-content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+/* === SIDEBAR STICKY FIX (chat always stays on the right) === */
+.lesson-room{
+  align-items: start;     /* важно для sticky внутри grid */
+  height: auto;           /* НЕ фиксируем высоту на 100vh */
+  min-height: calc(100vh - 100px);
+}
+
+.lesson-sidebar{
+  position: sticky;
+  top: 100px;             /* под твой fixed nav */
+  height: calc(100vh - 120px);
+  overflow: hidden;
+  align-self: start;
+}
+
+/* === SUBTITLES HEADER LAYOUT FIX === */
+.subtitles-fixed{
+  display: block; /* убираем column-раскладку, будем управлять внутри */
+}
+
+#subtitles-container{
+  /* на всякий случай (если id используется) */
+}
+
+/* Первая строка: "Субтитры:" + кнопка справа */
+.subtitles-fixed > strong{
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.subtitles-fixed .subtitles-recognition-btn{
+  float: right;              /* кнопка справа */
+  width: auto !important;    /* НЕ растягивать на всю ширину */
+  padding: 8px 12px !important;
+  border-radius: 12px;
+  font-weight: 900;
+}
+
+/* Текст субтитров и hint — на новую строку */
+.subtitles-fixed #subtitles-text,
+.subtitles-fixed .subtitles-hint{
+  display: block;
+  clear: both;
+  margin-top: 10px;
+}
+
+/* === SUBTITLES: strong + button in one row, text below === */
+#subtitles-container.subtitles-fixed{
+  display: grid;
+  grid-template-columns: 1fr auto; /* слева строка, справа кнопка */
+  grid-template-rows: auto auto auto;
+  column-gap: 16px;
+  row-gap: 10px;
+  align-items: center;
+}
+
+/* "Субтитры:" — в левую ячейку первой строки */
+#subtitles-container.subtitles-fixed > strong{
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+}
+
+/* Кнопка — справа в первой строке */
+#subtitles-container.subtitles-fixed > .subtitles-recognition-btn{
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  width: auto !important;
+  padding: 8px 12px !important;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+/* Текст субтитров — на всю ширину во 2 строке */
+#subtitles-container.subtitles-fixed > #subtitles-text{
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: block;
+  margin: 0;
+}
+
+/* Hint — на всю ширину в 3 строке */
+#subtitles-container.subtitles-fixed > .subtitles-hint{
+  grid-column: 1 / -1;
+  grid-row: 3;
+  display: block;
+  margin: 0 !important;
+}
+
+/* === Teacher header layout === */
+.teacher-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.teacher-header h1{
+  margin: 0;
+}
+
+/* === Teacher cards grid fix === */
+.lessons-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px; /* нормальный воздух */
+}
+
+@media (max-width: 900px){
+  .lessons-grid{
+    grid-template-columns: 1fr;
+  }
+}
+
+.lesson-card{
+  padding: 28px;
+  margin-bottom: 10px;
+}
+
+/* =========================
+   CONTRAST: buttons yellow -> text black (FINAL FIX)
+   ========================= */
+
+/* любые жёлтые кнопки */
+body.theme-contrast .lesson-add-btn,
+body.theme-contrast .lesson-count,
+body.theme-contrast .btn-primary,
+body.theme-contrast .btn-danger,
+body.theme-contrast #startSpeechBtnSubtitle,
+body.theme-contrast .ui-btn{
+  color: #000 !important;
+}
+
+/* и весь текст внутри них тоже */
+body.theme-contrast .lesson-add-btn *,
+body.theme-contrast .lesson-count *,
+body.theme-contrast .btn-primary *,
+body.theme-contrast .btn-danger *,
+body.theme-contrast #startSpeechBtnSubtitle *,
+body.theme-contrast .ui-btn *{
+  color: #000 !important;
+}
+
+/* если какие-то кнопки прозрачные с жёлтой рамкой — оставляем жёлтый текст */
+body.theme-contrast .lesson-edit-btn{
+  background: #000 !important;
+  color: #ff0 !important;
+  border-color: #ff0 !important;
+}
+body.theme-contrast .lesson-edit-btn *{
+  color: #ff0 !important;
+}
+
+.lesson-add-form{
+  width: 100%;
+  max-width: 1200px;   /* можешь поставить 1400 если хочешь шире */
+  margin: 0 auto 28px;
+  padding: 28px;
+  border: 2px solid var(--brand);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.lessons-wrapper{
+  width: min(1400px, 100%);
+  margin: 60px auto;
+  padding: 20px;
+}
+
+.lessons-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px;
+}
+
+@media (max-width: 900px){
+  .lessons-grid{ grid-template-columns: 1fr; }
+}
+
+/* === CONTRAST: settings button (ui-btn) must be yellow, not black === */
+body.theme-contrast .ui-btn{
+  background: #000 !important;
+  color: #ff0 !important;
+  border-color: #ff0 !important;
+}
+body.theme-contrast .ui-btn *{
+  color: #ff0 !important;
+}
+
+/* если иконка font-awesome/svg */
+body.theme-contrast .ui-btn svg,
+body.theme-contrast .ui-btn i{
+  color: #ff0 !important;
+  fill: #ff0 !important;
+}
+
+/* === Add lesson form: FULL WIDTH === */
+.lesson-add-form{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 0 28px 0 !important;
+
+  padding: 28px;
+  border: 2px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+/* если форма внутри grid — растянуть на 2 колонки */
+.lessons-grid .lesson-add-form{
+  grid-column: 1 / -1;
+}
+
+.lessons-wrapper{
+  width: min(1300px, 96vw) !important;
+}
+
+/* =========================
+   DASHBOARD GRID (2 cards per row)
+   ========================= */
+
+.dashboard-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px;
+}
+
+/* адаптив */
+@media (max-width: 900px){
+  .dashboard-grid{
+    grid-template-columns: 1fr;
+  }
+}
+
+
+:root{
+  --font-scale: 1;
+}
+
+body{
+  font-size: calc(16px * var(--font-scale));
+}
+
+body.font-lg  { --font-scale: 1.1; }
+body.font-xl  { --font-scale: 1.25; }
+
+.ui-font-btn.active{
+  background: var(--brand);
+  color: var(--brand-contrast);
+}
+
+:root{ --font-scale: 1; }
+
+html{
+  font-size: calc(16px * var(--font-scale));
+}
+
+body.font-lg{ --font-scale: 1.10; }
+body.font-xl{ --font-scale: 1.25; }
+
+/* базовый размер */
+html{ font-size: 16px; }
+
+/* режимы */
+html.font-lg{ font-size: 18px; }
+html.font-xl{ font-size: 20px; }
+
+/* nav */
+.nav-link{ font-size: .95rem; }     /* вместо px */
+.btn-white, .btn-white1, .ui-btn{ font-size: .95rem; }
+
+
+
+/* поля ввода */
+.form-control{ font-size: 1rem; }
+
+/* Ensure controls scale with html font-size */
+.lesson-add-btn,
+.lesson-edit-btn,
+.btn-white,
+.btn-white1,
+.ui-btn,
+input,
+textarea,
+select{
+  font-size: 1rem !important;
+}
+
+/* Inputs/textarea text + placeholder тоже */
+input::placeholder,
+textarea::placeholder{
+  font-size: 1rem !important;
+}
+
+.lang-switch{ display:flex; gap:8px; align-items:center; }
+.lang-btn{
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 900;
+  cursor: pointer;
+}
+.lang-btn.active{
+  background: var(--brand);
+  color: var(--brand-contrast);
+  border-color: transparent;
+}
+body.theme-contrast .lang-btn.active{
+  background:#ff0 !important;
+  color:#000 !important;
+}
+
+nav { overflow: visible; }
+.ui-dropdown { position: absolute; z-index: 9999; }

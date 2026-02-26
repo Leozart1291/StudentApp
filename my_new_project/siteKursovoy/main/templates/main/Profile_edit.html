@@ -1,0 +1,128 @@
+{% load static %}
+<script src="{% static 'index.js' %}"></script>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{% static 'css/Profile_edit.css' %}">
+	<title>Главная страница</title>
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+		rel="stylesheet">
+</head>
+
+<body>
+{% include "partials/navbar.html" %}
+
+	<!-- главный баннер -->
+	<section class="profile_inf">
+		<div class="container">
+			<img class="img_profile" src="" alt="">
+			<div class="inf_txt">
+				<p>Aikyn</p>
+				<p>destroer1291@gmail.com</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="profile_edit">
+		<div class="container1">
+			<div class="left_side">
+				<img src="" alt="">
+				<div>
+					<p>Учетные данные</p>
+					<p>Сертификат по итогам обучения будет
+						содержать указанные вами имя и фамилия</p>
+				</div>
+			</div>
+
+			<div class="right_side">
+				<input type="text">
+				<input type="text">
+				<input type="text">
+				<input type="text">
+				<input type="text">
+				<button></button>
+			</div>
+		</div>
+	</section>
+	<div>
+		<a href=""></a>
+	</div>
+
+	<!-- ФууууууТееееееР -->
+	<footer class="footer">
+		<div class="footer-container">
+			<div class="footer-top">
+				<div class="footer-brand">
+					<div class="footer-logo-bg">
+						<img src="{% static 'images/StudentAppW.png' %}" alt="Логотип">
+					</div>
+				</div>
+
+				<p class="footer-description">
+					Бесплатные курсы. Реальные навыки. Настоящее будущее.
+				</p>
+
+				<div class="footer-socials">
+					<a href="#"><i class="fab fa-facebook-f"></i></a>
+					<a href="#"><i class="fab fa-instagram"></i></a>
+					<a href="#"><i class="fab fa-twitter"></i></a>
+					<a href="#"><i class="fab fa-youtube"></i></a>
+				</div>
+			</div>
+
+			<div class="footer-links">
+				<div class="link-column">
+					<h3>Продукт</h3>
+					<ul>
+						<li><a href="#features">Преимущества</a></li>
+						<li><a href="#pricing">Тарифы</a></li>
+						<li><a href="#locations">Локации</a></li>
+						<li><a href="#faq">FAQ</a></li>
+					</ul>
+				</div>
+
+				<div class="link-column">
+					<h3>Компания</h3>
+					<ul>
+						<li><a href="#about">О проекте</a></li>
+						<li><a href="#support">Поддержка</a></li>
+						<li><a href="#">Контакты</a></li>
+						<li><a href="#">Вакансии</a></li>
+					</ul>
+				</div>
+
+				<div class="link-column">
+					<h3>Правовая информация</h3>
+					<ul>
+						<li><a href="#">Конфиденциальность</a></li>
+						<li><a href="#">Условия</a></li>
+						<li><a href="#">Политика cookies</a></li>
+					</ul>
+				</div>
+
+				<div class="link-column">
+					<h3>Ресурсы</h3>
+					<ul>
+						<li><a href="#">Помощь</a></li>
+						<li><a href="#">Сообщество</a></li>
+						<li><a href="#">Блог</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="footer-bottom">
+				<p>© 2025 Enactus Kazakhstan. Все права защищены.</p>
+			</div>
+		</div>
+	</footer>
+
+<script src="{% static 'JS/index.js' %}"></script>
+</body>
+
+</html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Жестикуляция{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+
+    <link href="bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    {% block page_css %}{% endblock %}
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+{% set DJANGO_BASE = "http://127.0.0.1:8000" %}
+
+<nav>
+    <div class="centr">
+        <div class="ele">
+
+            <div class="ff">
+                <div class="header-logo">
+                    <div class="brand">
+                        <a href="{{ DJANGO_BASE }}/" target="_top">
+                            <img id="siteLogo"
+                                 class="logo_img"
+                                 src="{{ url_for('static', filename='images/StudentApp.png') }}"
+                                 alt="">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-container">
+                    <div class="nav-links">
+                        <a href="{{ DJANGO_BASE }}/" target="_top" class="nav-link" data-i18n="nav_home">Басты</a>
+                        <a href="{{ DJANGO_BASE }}/courses/" target="_top" class="nav-link" data-i18n="nav_courses">Курстар</a>
+                        <a href="{{ DJANGO_BASE }}/Profile/" target="_top" class="nav-link" data-i18n="nav_profile">Профиль</a>
+                        <a href="{{ url_for('index') }}" class="nav-link active" data-i18n="nav_lessons">Уроки</a>
+
+                        {% if session.get('user_id') and session.get('role') == "teacher" %}
+                            <a href="{{ DJANGO_BASE }}/teacher/students/" target="_top"
+                               class="nav-link"
+                               data-i18n="nav_teacher_panel">
+                                Панель учителя
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-container">
+
+                <div class="lang-switch">
+                    <button type="button" class="lang-btn" data-lang="ru">RU</button>
+                    <button type="button" class="lang-btn" data-lang="kz">KZ</button>
+                </div>
+
+                {% if session.get('user_id') %}
+
+                    <!-- UI SETTINGS -->
+                    <div class="ui-menu-container">
+                        <button id="uiMenuBtn" class="ui-btn" type="button"
+                                aria-haspopup="true" aria-expanded="false"
+                                data-i18n="nav_settings">
+                            ⚙️ Настройки
+                        </button>
+
+                        <div id="uiDropdown" class="ui-dropdown" style="display:none;">
+
+                            <button type="button" class="ui-row" id="uiDarkBtn">
+                                <span data-i18n="nav_dark">🌙 Тёмный</span>
+                                <span class="ui-state" id="uiDarkState">OFF</span>
+                            </button>
+
+                            <button type="button" class="ui-row" id="uiContrastBtn">
+                                <span data-i18n="nav_contrast">🔆 Контраст</span>
+                                <span class="ui-state" id="uiContrastState">OFF</span>
+                            </button>
+
+                            <div class="ui-sep"></div>
+
+                            <div class="ui-font">
+                                <button type="button" class="ui-font-btn" data-font="normal">A</button>
+                                <button type="button" class="ui-font-btn" data-font="lg">A+</button>
+                                <button type="button" class="ui-font-btn" data-font="xl">A++</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- PROFILE MENU -->
+                    <div class="profile-menu-container">
+                        <button id="profileBtn" class="btn-white profile-link" type="button">
+                            <img src="{{ url_for('static', filename='images/default-avatar.png') }}"
+                                 alt="Аватар" class="avatar">
+                            {{ session.get('username', 'User') }}
+                        </button>
+
+                        <div id="dropdownMenu" class="dropdown-menu">
+                            <div class="dropdown-header">
+                                <img src="{{ url_for('static', filename='images/default-avatar.png') }}"
+                                     alt="Аватар" class="menu-avatar">
+                                <div class="user-info">
+                                    <strong>{{ session.get('username', 'User') }}</strong><br>
+                                    <small>{{ session.get('email', '') }}</small>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <a href="{{ DJANGO_BASE }}/" target="_top" data-i18n="profile_home">Басты бет</a>
+                            <a href="{{ DJANGO_BASE }}/Profile/" target="_top" data-i18n="profile_my">Менің профилім</a>
+                            <a href="{{ DJANGO_BASE }}/profile/settings/" target="_top" data-i18n="profile_settings">Баптаулар</a>
+                            <a href="{{ DJANGO_BASE }}/sertificates/" target="_top" data-i18n="profile_certificates">Сертификаттар</a>
+                            <a href="{{ DJANGO_BASE }}/logout/" target="_top" class="vihod" data-i18n="profile_logout">Шығу</a>
+                        </div>
+                    </div>
+
+                {% else %}
+                    <a href="{{ url_for('login') }}" target="_top"
+                       id="authBtn" class="btn-white1"
+                       data-i18n="nav_login">
+                        Кіру
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ⛔ НИЖЕ НИЧЕГО НЕ МЕНЯЛОСЬ — JS 100% ОСТАЛСЯ КАК У ТЕБЯ -->
+
+<script>
+    // Profile dropdown
+    (function () {
+        const btn = document.getElementById('profileBtn');
+        const menu = document.getElementById('dropdownMenu');
+        if (!btn || !menu) return;
+
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu.classList.toggle('open');
+        });
+
+        document.addEventListener('click', () => {
+            menu.classList.remove('open');
+        });
+
+        menu.addEventListener('click', (e) => e.stopPropagation());
+    })();
+
+    // UI settings dropdown
+    (function () {
+
+        const uiMenuBtn = document.getElementById('uiMenuBtn');
+        const uiDropdown = document.getElementById('uiDropdown');
+
+        const uiDarkBtn = document.getElementById('uiDarkBtn');
+        const uiContrastBtn = document.getElementById('uiContrastBtn');
+
+        const uiDarkState = document.getElementById('uiDarkState');
+        const uiContrastState = document.getElementById('uiContrastState');
+
+        const fontBtns = document.querySelectorAll('.ui-font-btn');
+
+        if (!uiMenuBtn || !uiDropdown) return;
+
+        const LS_THEME = 'ui_theme';
+        const LS_FONT = 'ui_font';
+
+        function setTheme(theme) {
+            document.body.classList.remove('theme-dark', 'theme-contrast');
+
+            if (theme === 'dark') document.body.classList.add('theme-dark');
+            if (theme === 'contrast') document.body.classList.add('theme-contrast');
+
+            localStorage.setItem(LS_THEME, theme || '');
+
+            if (uiDarkState) uiDarkState.textContent = theme === 'dark' ? 'ON' : 'OFF';
+            if (uiContrastState) uiContrastState.textContent = theme === 'contrast' ? 'ON' : 'OFF';
+        }
+
+        function setFont(size) {
+            document.body.classList.remove('font-lg', 'font-xl');
+            if (size === 'lg') document.body.classList.add('font-lg');
+            if (size === 'xl') document.body.classList.add('font-xl');
+            localStorage.setItem(LS_FONT, size || 'normal');
+        }
+
+        function toggleUiMenu() {
+            uiDropdown.style.display =
+                uiDropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Открытие меню
+        uiMenuBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            toggleUiMenu();
+        });
+
+        // Клики внутри меню не закрывают его
+        uiDropdown.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+
+        // Закрытие только если клик вне обоих меню
+        document.addEventListener('click', function (e) {
+            if (!uiDropdown.contains(e.target) &&
+                !uiMenuBtn.contains(e.target)) {
+                uiDropdown.style.display = 'none';
+            }
+        });
+
+        // Тёмный
+        if (uiDarkBtn) {
+            uiDarkBtn.addEventListener('click', function () {
+                const isDark = document.body.classList.contains('theme-dark');
+                setTheme(isDark ? '' : 'dark');
+
+            });
+        }
+
+        // Контраст
+        if (uiContrastBtn) {
+            uiContrastBtn.addEventListener('click', function () {
+                const isContrast = document.body.classList.contains('theme-contrast');
+                setTheme(isContrast ? '' : 'contrast');
+            });
+        }
+
+        // Шрифт
+        fontBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                setFont(btn.dataset.font);
+            });
+        });
+
+        setTheme(localStorage.getItem(LS_THEME) || '');
+        setFont(localStorage.getItem(LS_FONT) || 'normal');
+
+    })();
+</script>
+<script>
+    (function () {
+
+        const LS_LANG = 'ui_lang';
+
+        const dict = {
+            ru: {
+                nav_home: "Главная",
+                nav_courses: "Курсы",
+                nav_profile: "Профиль",
+                nav_lessons: "Уроки",
+                nav_teacher_panel: "Панель учителя",
+                nav_settings: "Настройки",
+                nav_dark: "🌙 Тёмный",
+                nav_contrast: "🔆 Контраст",
+                nav_login: "Войти",
+
+                profile_home: "Главная",
+                profile_my: "Мой профиль",
+                profile_settings: "Настройки",
+                profile_certificates: "Сертификаты",
+                profile_logout: "Выйти",
+                home_teacher_panel: 'Панель учителя',
+                home_teacher_manage: 'Управляйте своими уроками',
+                home_create_lesson: 'Создать урок',
+
+                home_active_lesson_label: 'Активный урок:',
+                home_go: 'Перейти',
+                home_qr: 'QR код',
+                home_stop: 'Остановить',
+
+                home_running_now: 'Идёт сейчас',
+                home_id_prefix: 'ID:',
+                home_tasks_word: 'заданий',
+
+                home_start: 'Начать',
+                home_edit: 'Изменить',
+
+                home_no_lessons_title: 'У вас пока нет уроков',
+                home_no_lessons_desc: 'Создайте свой первый урок, чтобы начать обучение.',
+
+                home_hi: 'Привет',
+                home_student_hint: 'Готовы начать изучение языка жестов? Введите код урока, который дал учитель.',
+                home_enter_code: 'Ввести код урока',
+                home_my_profile: 'Мой профиль',
+
+                home_by_code_title: 'Вход по коду',
+                home_by_code_desc: 'Используйте 6-значный код с доски учителя для входа в урок.',
+                home_by_qr_title: 'Вход по QR',
+                home_by_qr_desc: 'Отсканируйте QR-код, который покажет учитель на экране.',
+                home_chat_title: 'Чат урока',
+                home_chat_desc: 'Общайтесь с учителем и другими учениками в реальном времени.',
+
+                home_guest_title: 'Язык жестов',
+                home_guest_desc: 'Современная платформа для изучения жестового языка. Видео-уроки, распознавание речи и интерактивное обучение.',
+                home_start_learning: 'Начать обучение',
+                home_learn_more: 'Узнать больше',
+
+                home_feat_teachers_title: 'Для учителей',
+                home_feat_teachers_desc: 'Создавайте уроки, генерируйте коды доступа и управляйте классом в реальном времени.',
+                home_feat_ai_title: 'ИИ Помощник',
+                home_feat_ai_desc: 'Умный перевод речи в жесты и объяснение фраз для лучшего понимания.',
+                home_feat_videos_title: 'Видео жестов',
+                home_feat_videos_desc: 'База видео-жестов, синхронизированная с ходом урока.',
+                lesson_page_title: 'Урок',
+                lesson_teacher_camera: 'Камера учителя',
+                lesson_camera_on: 'Включить камеру',
+                lesson_camera_off: 'Выключить',
+                lesson_recognition: 'Распознавание',
+                lesson_subtitles: 'Субтитры:',
+                lesson_subtitles_hint: 'Chrome: только HTTPS или localhost. Браузер спросит доступ к микрофону.',
+                lesson_text_title: 'Текст урока',
+                lesson_tasks: 'Задания',
+                lesson_answer: 'Ответить',
+                lesson_download_file: 'Скачать файл',
+                lesson_chat: 'Чат',
+                lesson_participants: 'Участники',
+                lesson_close: 'Закрыть',
+                lesson_message_ph: 'Сообщение...',
+                lesson_send: 'Отправить',
+                profile_lessons_title: "Мои уроки",
+                lesson_title_label: "Название урока",
+                lesson_description_label: "Описание",
+                lesson_tasks_label: "Задания",
+                lesson_tasks_placeholder: "Каждое задание с новой строки",
+                lesson_create_btn: "Создать",
+                lesson_add_btn: "Добавить урок",
+                lesson_edit_btn: "Изменить",
+                lesson_save_btn: "Сохранить",
+                lesson_tasks_word: "заданий",
+                lesson_title_short: "Название",
+                profile_no_lessons: "У вас пока нет уроков.",
+                common_cancel: "Отмена",
+            },
+            kz: {
+                nav_home: "Басты бет",
+                nav_courses: "Курстар",
+                nav_profile: "Профиль",
+                nav_lessons: "Сабақтар",
+                nav_teacher_panel: "Мұғалім панелі",
+                nav_settings: "Баптаулар",
+                nav_dark: "🌙 Қараңғы",
+                nav_contrast: "🔆 Контраст",
+                nav_login: "Кіру",
+
+                profile_home: "Басты бет",
+                profile_my: "Менің профилім",
+                profile_settings: "Баптаулар",
+                profile_certificates: "Сертификаттар",
+                profile_logout: "Шығу",
+                home_teacher_panel: 'Мұғалім панелі',
+                home_teacher_manage: 'Сабақтарыңызды басқарыңыз',
+                home_create_lesson: 'Сабақ құру',
+
+                home_active_lesson_label: 'Белсенді сабақ:',
+                home_go: 'Өту',
+                home_qr: 'QR код',
+                home_stop: 'Тоқтату',
+
+                home_running_now: 'Қазір жүріп жатыр',
+                home_id_prefix: 'ID:',
+                home_tasks_word: 'тапсырма',
+
+                home_start: 'Бастау',
+                home_edit: 'Өзгерту',
+
+                home_no_lessons_title: 'Сізде әзірге сабақ жоқ',
+                home_no_lessons_desc: 'Оқытуды бастау үшін алғашқы сабағыңызды жасаңыз.',
+
+                home_hi: 'Сәлем',
+                home_student_hint: 'Жест тілін үйренуді бастаймыз ба? Мұғалім берген сабақ кодын енгізіңіз.',
+                home_enter_code: 'Сабақ кодын енгізу',
+                home_my_profile: 'Менің профилім',
+
+                home_by_code_title: 'Код арқылы кіру',
+                home_by_code_desc: 'Сабаққа кіру үшін мұғалім тақтаға жазған 6 таңбалы кодты қолданыңыз.',
+                home_by_qr_title: 'QR арқылы кіру',
+                home_by_qr_desc: 'Мұғалім экранда көрсететін QR-кодты сканерлеңіз.',
+                home_chat_title: 'Сабақ чаты',
+                home_chat_desc: 'Мұғаліммен және басқа оқушылармен нақты уақытта сөйлесіңіз.',
+
+                home_guest_title: 'Жест тілі',
+                home_guest_desc: 'Жест тілін үйренуге арналған заманауи платформа. Видео сабақтар, сөйлеуді тану және интерактивті оқу.',
+                home_start_learning: 'Оқуды бастау',
+                home_learn_more: 'Толығырақ',
+
+                home_feat_teachers_title: 'Мұғалімдерге',
+                home_feat_teachers_desc: 'Сабақ құрыңыз, қолжеткізу кодтарын жасаңыз және сыныпты нақты уақытта басқарыңыз.',
+                home_feat_ai_title: 'AI көмекші',
+                home_feat_ai_desc: 'Сөйлеуді жестке ақылды аудару және жақсы түсіну үшін фразаларды түсіндіру.',
+                home_feat_videos_title: 'Жест видеолары',
+                home_feat_videos_desc: 'Сабақ барысымен синхрондалған жест видеоларының базасы.',
+                lesson_page_title: 'Сабақ',
+                lesson_teacher_camera: 'Мұғалім камерасы',
+                lesson_camera_on: 'Камераны қосу',
+                lesson_camera_off: 'Өшіру',
+                lesson_recognition: 'Тану',
+                lesson_subtitles: 'Субтитрлер:',
+                lesson_subtitles_hint: 'Chrome: тек HTTPS немесе localhost. Браузер микрофонға рұқсат сұрайды.',
+                lesson_text_title: 'Сабақ мәтіні',
+                lesson_tasks: 'Тапсырмалар',
+                lesson_answer: 'Жауап беру',
+                lesson_download_file: 'Файлды жүктеу',
+                lesson_chat: 'Чат',
+                lesson_participants: 'Қатысушылар',
+                lesson_close: 'Жабу',
+                lesson_message_ph: 'Хабарлама...',
+                lesson_send: 'Жіберу',
+                profile_lessons_title: "Менің сабақтарым",
+                lesson_title_label: "Сабақ атауы",
+                lesson_description_label: "Сипаттама",
+                lesson_tasks_label: "Тапсырмалар",
+                lesson_tasks_placeholder: "Әр тапсырманы жаңа жолдан жазыңыз",
+                lesson_create_btn: "Құру",
+                lesson_add_btn: "Сабақ қосу",
+                lesson_edit_btn: "Өзгерту",
+                lesson_save_btn: "Сақтау",
+                lesson_tasks_word: "тапсырма",
+                lesson_title_short: "Атауы",
+                profile_no_lessons: "Сізде әзірге сабақ жоқ.",
+                common_cancel: "Бас тарту",
+            }
+        };
+
+        function applyLang(lang) {
+            if (!dict[lang]) return;
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                if (dict[lang][key]) {
+                    el.textContent = dict[lang][key];
+                }
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.dataset.i18nPlaceholder;
+                if (dict[lang][key]) {
+                    el.placeholder = dict[lang][key];
+                }
+            });
+
+            document.documentElement.lang = lang;
+            localStorage.setItem(LS_LANG, lang);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // язык по умолчанию
+            const saved = localStorage.getItem(LS_LANG) || 'ru';
+            applyLang(saved);
+
+            // кнопки переключения
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    applyLang(btn.dataset.lang);
+                });
+            });
+
+        });
+
+    })();
+
+
+</script>
+
+<main class="container">
+    {% block content %}{% endblock %}
+</main>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

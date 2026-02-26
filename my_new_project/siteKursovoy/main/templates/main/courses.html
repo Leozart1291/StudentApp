@@ -1,0 +1,110 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Курсы</title>
+    <link rel="stylesheet" href="{% static 'css/courses.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+		rel="stylesheet">
+
+
+</head>
+<body>
+{% include "partials/AI.html" %}
+{% include "partials/navbar.html" %}
+
+<div class="container">
+<div class="dd">
+    <h1>Барлық курстар</h1>
+    <div class="search_bar">
+        <form method="get" class="search_bar">
+            <div class="contain">
+                <input class="sear"
+                       type="text"
+                       id="searchInput"
+                       name="q"
+                       value="{{ query }}"
+                       placeholder="Поиск">
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="all">
+    <!-- Сайдбар -->
+    <div class="sidebar">
+        <h3>Мамандықтар</h3>
+        <form method="get">
+            <button type="submit" name="profession" value="">Барлығы</button>
+            {% for prof in professions %}
+                <button type="submit"
+                        name="profession"
+                        value="{{ prof.id }}"
+                        class="{% if selected_profession == prof.id|stringformat:'s' %}active{% endif %}">
+                    {{ prof.name }}
+                </button>
+            {% endfor %}
+        </form>
+    </div>
+
+    <!-- Сетка курсов -->
+    <div class="courses-grid-c" id="coursesList">
+        {% for course in courses %}
+            <div class="course-card-c">
+                <a href="{% url 'course_detail' course.id %}">
+                    {% if course.image %}
+                        <img src="{{ course.image.url }}" alt="{{ course.title }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/300x150?text=Нет+изображения" alt="Нет изображения">
+                    {% endif %}
+                    <h3>{{ course.title }}</h3>
+                </a>
+            </div>
+        {% empty %}
+            <p class="no-courses">Курстар әзірше жоқ</p>
+        {% endfor %}
+    </div>
+</div>
+</div>
+
+{% include "partials/footer.html" %}
+
+<script src="{% static 'JS/index.js' %}"></script>
+
+<script>
+document.getElementById("searchInput").addEventListener("input", function () {
+    const query = this.value;
+    const profession = new URLSearchParams(window.location.search).get("profession") || "";
+
+    fetch(`/courses/search/?q=${query}&profession=${profession}`)
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById("coursesList");
+            container.innerHTML = "";
+
+            if (data.courses.length === 0) {
+                container.innerHTML = "<p class='no-courses'>Ничего не найдено</p>";
+                return;
+            }
+
+            data.courses.forEach(course => {
+                container.innerHTML += `
+                    <div class="course-card-c">
+                        <a href="/course/${course.id}/">
+                            <img src="${course.image || 'https://via.placeholder.com/300x150?text=Нет+изображения'}" alt="${course.title}">
+                            <h3>${course.title}</h3>
+                        </a>
+                    </div>
+                `;
+            });
+        });
+});
+</script>
+</body>
+</html>

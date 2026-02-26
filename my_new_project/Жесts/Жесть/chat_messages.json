@@ -1,0 +1,208 @@
+{
+  "DI3KXE": [
+    {
+      "id": 1,
+      "user_id": 2,
+      "username": "Асыл",
+      "role": "student",
+      "message": "Привет Бауыржан ағай",
+      "timestamp": "2026-01-20T23:05:47.816435"
+    }
+  ],
+  "JQGZKG": [
+    {
+      "id": 1,
+      "user_id": 2,
+      "username": "Асыл",
+      "role": "student",
+      "message": "пшиатвпоывао",
+      "timestamp": "2026-01-20T23:23:29.541299"
+    }
+  ],
+  "01PXO8": [
+    {
+      "id": 1,
+      "user_id": 2,
+      "username": "Асыл",
+      "role": "student",
+      "message": "жлвльфыв",
+      "timestamp": "2026-02-04T00:02:11.451007"
+    }
+  ],
+  "GIJGEI": [
+    {
+      "id": 1,
+      "user_id": 9,
+      "username": "6",
+      "role": "student",
+      "message": "HIII",
+      "timestamp": "2026-02-05T14:39:57.716172"
+    }
+  ],
+  "HJJL4R": [
+    {
+      "id": 1,
+      "user_id": 7,
+      "username": "5",
+      "role": "student",
+      "message": "hi",
+      "timestamp": "2026-02-05T15:27:46.587102"
+    }
+  ],
+  "ZNPN26": [
+    {
+      "id": 1,
+      "user_id": 4,
+      "username": "Leozart",
+      "role": "student",
+      "message": "привет",
+      "timestamp": "2026-02-05T19:50:31.045600"
+    }
+  ],
+  "VDDSYF": [
+    {
+      "id": 1,
+      "user_id": 10,
+      "username": "Жарасқан ",
+      "role": "student",
+      "message": "Айқын привет",
+      "timestamp": "2026-02-06T09:19:36.765913"
+    },
+    {
+      "id": 2,
+      "user_id": 3,
+      "username": "Aikyn",
+      "role": "teacher",
+      "message": "привет чтм",
+      "timestamp": "2026-02-06T09:19:54.569150"
+    }
+  ],
+  "LZVTVP": [
+    {
+      "id": 1,
+      "user_id": 4,
+      "username": "Leozart",
+      "role": "student",
+      "message": "пп",
+      "timestamp": "2026-02-19T11:59:46.851210"
+    },
+    {
+      "id": 2,
+      "user_id": 3,
+      "username": "Aikyn",
+      "role": "teacher",
+      "message": "пп",
+      "timestamp": "2026-02-19T11:59:53.860414"
+    }
+  ],
+  "86L3DI": [
+    {
+      "id": 1,
+      "user_id": 3,
+      "username": "Aikyn",
+      "role": "teacher",
+      "message": "ппп",
+      "timestamp": "2026-02-23T12:06:26.676158"
+    }
+  ],
+  "5PB8SJ": [
+    {
+      "id": 1,
+      "user_id": 11,
+      "username": "qanat",
+      "role": "student",
+      "message": "fgf",
+      "timestamp": "2026-02-23T15:43:34.065439"
+    },
+    {
+      "id": 2,
+      "user_id": 11,
+      "username": "qanat",
+      "role": "student",
+      "message": "апай",
+      "timestamp": "2026-02-23T15:43:38.808890"
+    }
+  ],
+  "6UM2ZU": [
+    {
+      "id": 1,
+      "user_id": 11,
+      "username": "qanat",
+      "role": "student",
+      "message": "Апай түсінбедім",
+      "timestamp": "2026-02-23T15:50:47.192144"
+    },
+    {
+      "id": 2,
+      "user_id": 3,
+      "username": "Aikyn",
+      "role": "teacher",
+      "message": "жақсы қазір қайталап өтемін",
+      "timestamp": "2026-02-23T15:50:53.026077"
+    }
+  ],
+  "KS9NAI": [
+    {
+      "id": 1,
+      "user_id": 3,
+      "username": "Aikyn",
+      "role": "teacher",
+      "message": "привет",
+      "timestamp": "2026-02-24T12:02:00.543310"
+    },
+    {
+      "id": 2,
+      "user_id": 3,
+      "username": "Aikyn",
+      "role": "teacher",
+      "message": "hello",
+      "timestamp": "2026-02-24T12:08:46.438332"
+    },
+    {
+      "id": 3,
+      "user_id": 3,
+      "username": "Aikyn",
+      "role": "teacher",
+      "message": "как вас зовут",
+      "timestamp": "2026-02-24T12:10:56.267157"
+    },
+    {
+      "id": 4,
+      "user_id": 4,
+      "username": "Leozart",
+      "role": "student",
+      "message": "привет",
+      "timestamp": "2026-02-24T12:12:05.823400"
+    }
+  ],
+  "TUK23I": [
+    {
+      "id": 1,
+      "user_id": 3,
+      "username": "Aikyn",
+      "role": "teacher",
+      "message": "я не понял",
+      "timestamp": "2026-02-24T12:44:53.461291"
+    }
+  ],
+  "9UQWZY": [
+    {
+      "id": 1,
+      "user_id": 3,
+      "username": "Aikyn",
+      "role": "teacher",
+      "message": "Мен түсінбедім",
+      "timestamp": "2026-02-24T14:22:46.378369"
+    }
+  ],
+  "8M8AMA": [
+    {
+      "id": 1,
+      "user_id": 3,
+      "username": "Aikyn",
+      "role": "teacher",
+      "message": "апр",
+      "timestamp": "2026-02-26T06:17:35.370578"
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{% static 'css/Register.css' %}">
+	<title>Главная страница</title>
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+		rel="stylesheet">
+</head>
+
+<body>
+	<!--  -->
+	<nav>
+		<div class="centr">
+			<div class="ele">
+				<div class="ff">
+					<div class="header-logo">
+						<div class="brand"><a href="{% url 'index' %}"><img class="logo_img" src="{% static 'images/StudentApp.png' %}" alt=""></a>
+						</div>
+					</div>
+				</div>
+				<div class="button-container">
+					<a href="{% url 'Login' %}" id="authBtn" class="btn-white">Кіру</a>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+	 <section class="reg">
+        <div class="register-container">
+            <h2>Аккаунт құру</h2>
+            <form action="{% url 'register' %}" method="post">
+    {% csrf_token %}
+
+    <div class="form-row">
+        <div class="input-group">
+            <label for="first_name">Аты</label>
+            <input type="text" id="first_name" name="first_name" required>
+        </div>
+        <div class="input-group">
+            <label for="last_name">Тегі</label>
+            <input type="text" id="last_name" name="last_name" required>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="input-group">
+            <label for="username">Пайдаланушы аты</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="input-group">
+            <label for="password">Құпиясөз</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div class="input-group">
+            <label for="confirm-password">Құпиясөзді растау</label>
+            <input type="password" id="confirm-password" name="confirm-password" required>
+        </div>
+    </div>
+
+    <div class="input-group roll">
+        <label for="role">Жынысын таңдаңыз</label>
+        <select class="rol" id="role" name="role" required>
+            <option value="" disabled selected>-- Таңдаңыз --</option>
+            <option value="male">Ер</option>
+            <option value="female">Әйел</option>
+        </select>
+    </div>
+
+    <button id="registerBtn" type="submit" class="btn_reg">Тіркелу</button>
+
+    <div class="login-link">
+        Аккаунтыңыз бар ма?
+        <a href="{% url 'Login' %}">Кіру</a>
+    </div>
+</form>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

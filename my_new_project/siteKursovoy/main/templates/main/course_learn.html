@@ -1,0 +1,61 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course.title }}</title>
+    <link rel="stylesheet" href="{% static 'css/course_learn.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+{% include "partials/AI.html" %}
+   {% include "partials/navbar.html" %}
+
+<h1>{{ course.title }}</h1>
+
+<div class="modules">
+  {% for module in course.modules.all %}
+    {% with module.id as mid %}
+    <details class="module-block" {% if mid not in passed_modules %}disabled{% endif %}>
+        <summary class="module-title" {% if mid not in passed_modules %}style="color: #aaa; cursor: not-allowed;"{% endif %}>
+            {{ module.title }}
+        </summary>
+
+        {% if mid in passed_modules %}
+           <ul class="lesson-list">
+    {% for lesson in module.lessons.all %}
+        <li>
+            <a href="{% url 'lesson_detail' course.id lesson.id %}">{{ lesson.title }}</a>
+
+            {% if lesson.test %}
+                <div class="test-item">
+                    {% if lesson.test.id in passed_tests %}
+                        <span class="test-passed">🟢 Тест өтілді</span>
+                    {% else %}
+                        <a href="{% url 'lesson_test' lesson.id %}" class="test-link">
+                            📝 Тест "{{ lesson.title }}"
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>Пока нет уроков.</li>
+    {% endfor %}
+</ul>
+
+        {% else %}
+            <p class="locked">🔒 Бұл модулді ашу үшін алдыңғы модульдің тестін өтіңіз.</p>
+        {% endif %}
+    </details>
+    {% endwith %}
+{% endfor %}
+
+</div>
+
+<script src="{% static 'JS/index.js' %}"></script>
+</body>
+</html>

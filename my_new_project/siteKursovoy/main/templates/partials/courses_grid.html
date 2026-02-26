@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+    .courses-preview {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 0;
+        margin-top: 15px;
+    padding-top: 15px;
+
+}
+
+.courses-preview .top-bar h2 {
+    font-size: 2rem;
+    color: #0255A5;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-top: 15px;
+}
+
+/* Горизонтальный скролл */
+.home-courses-scroll {
+  display: flex;
+  overflow-x: auto; /* Включает горизонтальный скролл */
+  overflow-y: visible;
+  scroll-behavior: smooth;
+  scrollbar-width: thin; /* Для Firefox */
+    padding-top: 15px;
+
+}
+
+/* Для Chrome, Edge, Safari */
+.home-courses-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+.home-courses-scroll::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+.home-courses-scroll::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* Карточка курса (как в твоем дизайне) */
+.course-card {
+    flex: 0 0 250px;
+    background-color: #ffffff;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(2, 85, 165, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 24px rgba(2, 85, 165, 0.25);
+    border-color: #0255A5;
+    z-index: 10; /* чтобы карточка не уходила под соседние */
+}
+
+.course-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-bottom: 3px solid #0255A5;
+}
+
+.course-card h3 {
+    font-size: 1.1rem;
+    color: #0255A5;
+    font-weight: 600;
+    text-align: center;
+    padding: 15px;
+    margin: 0;
+}
+
+/* Нет курсов */
+.no-courses {
+    font-size: 1.2rem;
+    color: #888;
+    padding: 40px 0;
+    text-align: center;
+}
+/* --- Горизонтальный скролл мышкой и скрытый индикатор --- */
+.home-courses-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
+    margin: 0;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+/* Добавляем поддержку горизонтального скролла колесиком */
+.home-courses-scroll {
+    cursor: grab;
+}
+
+.home-courses-scroll:active {
+    cursor: grabbing;
+}
+</style>
+</head>
+<body>
+<section class="courses-preview">
+
+
+    <!-- Горизонтальный скролл курсов -->
+    <div class="home-courses-scroll">
+        {% for course in courses %}
+        <div class="course-card">
+            <a href="{% url 'course_detail' course.id %}">
+                {% if course.image %}
+                    <img src="{{ course.image.url }}" alt="{{ course.title }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/300x150?text=Нет+изображения" alt="Нет изображения">
+                {% endif %}
+                <h3>{{ course.title }}</h3>
+            </a>
+        </div>
+        {% empty %}
+        <p class="no-courses">Курстар әзірше жоқ</p>
+        {% endfor %}
+    </div>
+</section>
+
+
+<script>
+const scrollContainer = document.querySelector('.home-courses-scroll');
+
+scrollContainer.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  scrollContainer.scrollLeft += e.deltaY; // колесико прокручивает горизонтально
+});
+</script>
+</body>
+</html>

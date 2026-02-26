@@ -1,0 +1,44 @@
+{% load static %}
+
+<footer class="footer">
+  <div class="footer-container">
+
+    <div class="footer-grid">
+      <!-- ЛЕВО: логотип + описание -->
+      <div class="footer-left">
+        <div class="footer-brand">
+          <img class="footer-logo" src="{% static 'images/StudentAppW.png' %}" alt="StudentApp">
+          <span class="footer-brand-text">Student<span>App</span></span>
+        </div>
+
+        <p class="footer-description">
+          Инклюзивті білім беруге арналған жасанды интеллект платформасы.<br>
+          Есту қабілеті бұзылған студенттерге онлайн сабақтарды субтитр<br>
+          және жест тілі арқылы түсінуге мүмкіндік береді.
+        </p>
+      </div>
+
+      <!-- ЦЕНТР: Платформа -->
+      <div class="footer-col">
+        <h3 class="footer-title">Платформа</h3>
+        <a class="footer-link" href="{% url 'index' %}">Басты</a>
+        <a class="footer-link" href="{% url 'jj' %}">Уроки</a>
+        <a class="footer-link" href="{% url 'courses' %}">Курстар</a>
+        <a class="footer-link" href="{% url 'Profile' %}">Профиль</a>
+      </div>
+
+      <!-- ПРАВО: Жоба туралы -->
+      <div class="footer-col footer-col--right">
+        <h3 class="footer-title">Жоба туралы</h3>
+        <div class="footer-text">BilimHack 2026</div>
+        <div class="footer-text">Inclusive IT бағыты</div>
+        <div class="footer-text">Алматы, Қазақстан</div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2026 StudentApp. Барлық құқықтар қорғалған.
+    </div>
+
+  </div>
+</footer>

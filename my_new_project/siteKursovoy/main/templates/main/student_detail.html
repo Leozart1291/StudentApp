@@ -1,0 +1,372 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ lesson.title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+  :root{
+    --bg:#f6f7fb;
+    --card:#ffffff;
+    --text:#111827;
+    --muted:#6b7280;
+    --line: rgba(17,24,39,.12);
+    --shadow: 0 10px 30px rgba(17,24,39,.08);
+    --shadow2: 0 6px 18px rgba(17,24,39,.10);
+    --radius: 18px;
+  }
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .page-wrap{
+    padding: 90px 16px 40px;
+  }
+
+  .panel{
+    max-width: 1100px;
+    margin: 0 auto;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .panel-head{
+    padding: 22px 22px 16px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(99,102,241,.09), rgba(255,255,255,0));
+  }
+
+  .panel-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 12px;
+    margin: 0;
+    font-weight: 900;
+    font-size: clamp(20px, 2.2vw, 30px);
+  }
+
+  .student-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(99,102,241,.25);
+    background: rgba(99,102,241,.10);
+    font-weight: 700;
+    color: rgba(99,102,241,.95);
+    white-space: nowrap;
+  }
+
+  .panel-sub{
+    margin: 10px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .panel-body{
+    padding: 18px;
+  }
+
+  .section{
+    margin-top: 18px;
+  }
+
+  .section:first-child{
+    margin-top: 0;
+  }
+
+  .section-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin: 0 0 10px;
+    font-weight: 900;
+    font-size: 20px;
+  }
+
+  /* ===== TABLE ===== */
+  .table-wrap{
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  table.results{
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0;
+  }
+
+  table.results thead th{
+    text-align: left;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--muted);
+    background: rgba(0,0,0,.02);
+    border-bottom: 1px solid var(--line);
+    font-weight: 800;
+  }
+
+  table.results tbody td{
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+  }
+
+  table.results tbody tr:hover td{
+    background: rgba(99,102,241,.05);
+  }
+
+  table.results tbody tr:last-child td{
+    border-bottom: none;
+  }
+
+  .score-pill{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width: 56px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 900;
+    border: 1px solid var(--line);
+    background: #fafafa;
+  }
+
+  /* цвет по проценту */
+  .score-good{ color:#15803d; border-color: rgba(21,128,61,.25); background: rgba(21,128,61,.08); }
+  .score-mid{  color:#b45309; border-color: rgba(180,83,9,.25);  background: rgba(180,83,9,.08); }
+  .score-bad{  color:#b91c1c; border-color: rgba(185,28,28,.25); background: rgba(185,28,28,.08); }
+
+  .muted{
+    color: var(--muted);
+  }
+
+  .empty{
+    padding: 16px;
+    color: var(--muted);
+    border-top: 1px dashed var(--line);
+    background: rgba(0,0,0,.02);
+  }
+
+  /* ===== AI CARDS ===== */
+  .ai-card{
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 1px 0 rgba(17,24,39,.03);
+    overflow: hidden;
+    margin-top: 12px;
+  }
+
+  .ai-top{
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    display:flex;
+    flex-wrap:wrap;
+    gap: 8px 12px;
+    align-items:center;
+    justify-content: space-between;
+    background: rgba(0,0,0,.02);
+  }
+
+  .ai-meta{
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .ai-summary{
+    padding: 14px 16px 0;
+    font-weight: 800;
+  }
+
+  .grid2{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .box{
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px;
+    background: #fff;
+  }
+
+  .box h4{
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 900;
+  }
+
+  .pre{
+    white-space: pre-wrap;
+    margin: 0;
+    font-family: inherit;
+    color: #111827;
+    line-height: 1.45;
+  }
+
+  .ai-bottom{
+    padding: 0 16px 16px;
+  }
+
+  /* адаптив */
+  @media (max-width: 900px){
+    .grid2{ grid-template-columns: 1fr; }
+  }
+
+  /* мобильная таблица — можно скроллить */
+  .table-scroll{
+    overflow-x: auto;
+  }
+  .table-scroll::-webkit-scrollbar{ height: 10px; }
+  .table-scroll::-webkit-scrollbar-thumb{ background: rgba(0,0,0,.15); border-radius: 999px; }
+</style>
+</head>
+<body>
+
+    {% include "partials/navbar.html" %}
+
+    <div class="card">
+  <div class="page-wrap">
+  <section class="panel">
+    <header class="panel-head">
+      <h2 class="panel-title">
+        <span>Ученик: {{ student.username }}</span>
+        <span class="student-badge">
+          <i class="fa-solid fa-user"></i>
+          {{ student.username }}
+        </span>
+      </h2>
+      <p class="panel-sub">Здесь отображаются результаты тестов и аналитика ИИ по урокам.</p>
+    </header>
+
+    <div class="panel-body">
+
+      <!-- RESULTS -->
+      <div class="section">
+        <h3 class="section-title">
+          <i class="fa-solid fa-chart-column"></i>
+          Результаты тестов
+        </h3>
+
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table class="results">
+              <thead>
+                <tr>
+                  <th style="min-width: 220px;">Курс</th>
+                  <th style="min-width: 220px;">Модуль</th>
+                  <th style="min-width: 260px;">Урок</th>
+                  <th style="min-width: 90px;">%</th>
+                  <th style="min-width: 160px;">Дата</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in results %}
+                  {% with s=r.score|floatformat:0 %}
+                  <tr>
+                    <td>{{ r.test.lesson.module.course.title }}</td>
+                    <td>{{ r.test.lesson.module.title }}</td>
+                    <td>{{ r.test.lesson.title }}</td>
+
+                    <td>
+                      {# цвет по проценту #}
+                      {% if s|add:"0" >= 80 %}
+                        <span class="score-pill score-good">{{ s }}</span>
+                      {% elif s|add:"0" >= 50 %}
+                        <span class="score-pill score-mid">{{ s }}</span>
+                      {% else %}
+                        <span class="score-pill score-bad">{{ s }}</span>
+                      {% endif %}
+                    </td>
+
+                    <td class="muted">{{ r.completed_at|date:"d.m.Y H:i" }}</td>
+                  </tr>
+                  {% endwith %}
+                {% empty %}
+                  <tr>
+                    <td colspan="5" class="empty">Нет результатов</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI -->
+      <div class="section">
+        <h3 class="section-title">
+          <i class="fa-solid fa-robot"></i>
+          Рекомендации ИИ
+        </h3>
+
+        {% for a in analyses %}
+          <article class="ai-card">
+            <div class="ai-top">
+              <div class="ai-meta">
+                <i class="fa-regular fa-clock"></i>
+                {{ a.created_at|date:"d.m.Y H:i" }}
+              </div>
+              <div class="ai-meta">
+                <i class="fa-solid fa-book"></i>
+                {{ a.lesson.module.course.title }} / {{ a.lesson.title }}
+              </div>
+            </div>
+
+            <div class="ai-summary">
+              {{ a.summary }}
+            </div>
+
+            <div class="grid2">
+              <div class="box">
+                <h4>✅ Сильные стороны</h4>
+                <pre class="pre">{{ a.strengths }}</pre>
+              </div>
+
+              <div class="box">
+                <h4>⚠️ Слабые стороны</h4>
+                <pre class="pre">{{ a.weaknesses }}</pre>
+              </div>
+            </div>
+
+            <div class="ai-bottom">
+              <div class="box">
+                <h4>🎯 Рекомендации</h4>
+                <pre class="pre">{{ a.recommendations }}</pre>
+              </div>
+            </div>
+          </article>
+        {% empty %}
+          <div class="empty">Пока нет анализов</div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </section>
+</div>
+</div>
+
+
+    <footer>
+        {% include "partials/footer.html" %}
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

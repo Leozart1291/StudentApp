@@ -1,0 +1,101 @@
+    {% load static %}
+    <!DOCTYPE html>
+    <html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Менің сертификаттарым</title>
+        <link rel="stylesheet" href="{% static 'css/certificates.css' %}">
+        <style>
+            body {
+        font-family: 'Nunito', sans-serif;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 0 20px;
+        padding-top: 60px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 40px;
+        color: #333;
+    }
+
+    .certificates-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .certificate-card {
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        padding: 20px;
+        text-align: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .certificate-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .certificate-card h3 {
+        margin: 10px 0;
+        color: #007BFF;
+    }
+
+    .certificate-card p {
+        margin: 5px 0;
+        color: #555;
+    }
+
+    .btn-download {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 8px 20px;
+        background-color: #007BFF;
+        color: #fff;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: background-color 0.2s;
+    }
+
+    .btn-download:hover {
+        background-color: #0056b3;
+    }
+
+        </style>
+
+    </head>
+    <body>
+    {% include "partials/navbar.html" %}
+
+        <div class="container">
+            <h1>Менің сертификаттарым</h1>
+            {% if certificates %}
+            <div class="certificates-grid">
+                {% for cert in certificates %}
+                <div class="certificate-card">
+                    <h3>{{ cert.course.title }}</h3>
+                    <p>Берілді: {{ user.profile.first_name }} {{ user.profile.last_name }}</p>
+                    <p>Дата: {{ cert.issued_at|date:"d.m.Y" }}</p>
+                    <a href="{{ cert.file.url }}?v={{ cert.updated_at.timestamp }}" target="_blank" class="btn-download">Жүктеу</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+                <p>Сізде әзірше сертификат жоқ.</p>
+            {% endif %}
+        </div>
+
+    {% include "partials/footer.html" %}
+    </body>
+    </html>

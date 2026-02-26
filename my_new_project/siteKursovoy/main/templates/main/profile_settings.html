@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+
+        body{
+            padding-top: 50px;
+        }
+        /* profile.css */
+.avatar-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 2px solid #0255A5;
+}
+
+.profile-settings-container {
+    max-width: 800px;
+    margin: 100px auto 50px;
+}
+
+.regis {
+    padding-top: 80px;
+    padding-bottom: 80px;
+    display: flex;
+    justify-content: center;
+}
+
+.register-container {
+    background-color: #ffffff;
+    border: 2px solid #0255A5;
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(2, 85, 165, 0.15);
+    width: 600px;
+    max-width: 800px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.register-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(2, 85, 165, 0.25);
+}
+
+.hh {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.9rem;
+    color: #0255A5;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+/* Поля ввода */
+.input-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+    width: 575px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.95rem;
+    color: #0255A5;
+    margin-bottom: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.7rem;
+    border: 1px solid #0255A5;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(2,85,165,0.05);
+}
+
+.input-group input:focus {
+    border-color: #023e7d;
+    box-shadow: 0 4px 12px rgba(2,85,165,0.3);
+    outline: none;
+    transform: scale(1.02);
+}
+
+/* Кнопка сохранения */
+.btn_sign {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #0255A5;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 15px rgba(2, 85, 165, 0.2);
+}
+
+.btn_sign:hover {
+    background-color: #023e7d;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(2, 85, 165, 0.3);
+}
+
+/* Сообщения */
+ul.messages {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 15px;
+}
+
+ul.messages li {
+    padding: 8px 12px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+ul.messages li.error {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+ul.messages li.success {
+    background: #d4edda;
+    color: #155724;
+}
+
+/* Анимация появления формы */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+    </style>
+</head>
+<body>
+{% include "partials/navbar.html" %}
+
+
+
+{% block content %}
+<div class="regis">
+    <div class="register-container">
+        <h2 class="hh">Профиль баптаулары</h2>
+
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="input-group">
+                <label>Логин (өзгертілмейді)</label>
+                <input type="text" value="{{ user.username }}" disabled>
+            </div>
+
+            <div class="input-group">
+                <label>Аты</label>
+                <input type="text" name="first_name" value="{{ profile.first_name }}">
+            </div>
+
+            <div class="input-group">
+                <label>Тегі</label>
+                <input type="text" name="last_name" value="{{ profile.last_name }}">
+            </div>
+
+            <div class="input-group">
+                <label>Телефон</label>
+                <input type="text" name="phone_number" value="{{ profile.phone_number }}">
+            </div>
+
+            <div class="input-group">
+                <label>Профиля суреті</label>
+                {% if profile.photo %}
+                    <img src="{{ profile.photo.url }}" alt="Фото профиля" class="avatar-preview">
+                {% endif %}
+                <input type="file" name="photo">
+            </div>
+
+            <div class="input-group">
+                <label>Жаңа пароль</label>
+                <input type="password" name="password">
+            </div>
+
+            <div class="input-group">
+                <label>Парольді қайталаңыз</label>
+                <input type="password" name="password_confirm">
+            </div>
+
+            <button type="submit" class="btn_sign">Өзгерістерді сақтау</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+</body>
+</html>

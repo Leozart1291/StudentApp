@@ -1,0 +1,129 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{% static 'css/Profile.css' %}">
+	<title>Главная страница</title>
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+		rel="stylesheet">
+
+
+        <style>
+    .progress-container {
+        width: 260px;
+        height: 25px;
+        background: #eee;
+        border-radius: 10px;
+        overflow: hidden;
+        border:1px solid #1A01CC;
+        margin-bottom: 10px;
+    }
+
+    .progress-bar {
+        height: 100%;
+        width: 0; /* установим через inline */
+        text-align: center;
+        color: white;
+        line-height: 25px;
+        transition: width 0.5s ease-in-out;
+
+
+    /* 🔷 тот же красивый градиент */
+    background: linear-gradient(
+        270deg,
+        #0255A5 0%,
+        #007BCE 25%,
+        #00A3FF 50%,
+        #007BCE 75%,
+        #0255A5 100%
+    );
+
+    /* 👇 ключевая правка: делаем фон шире и зеркальный */
+    background-repeat: repeat-x;
+    background-size: 200% 100%;
+
+
+    /* 🔄 плавное движение слева направо */
+    animation: moveGradient 2s linear infinite;
+        animation-direction: reverse;
+}
+
+@keyframes moveGradient {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+</style>
+</head>
+
+<body>
+{% include "partials/AI.html" %}
+{% include "partials/navbar.html" %}
+
+	<section class="profile-section">
+    <div class="profile-container">
+        <div class="profile-info">
+            <h1>{{ user.profile.first_name }} {{ user.profile.last_name }}</h1>
+            <p class="user-bio">Бүгін — жаңа нәрсе үйренуге немесе білгеніңді тәжірибе жүзінде бекітуге тамаша күн.</p>
+            <a class="btn_to_course1" href="{% url 'sertificates' %}">Менің сертификаттарым</a>
+        </div>
+        <div class="profile-avatar">
+            <img src="{{ user.profile.photo.url }}" alt="Аватар">
+        </div>
+    </div>
+
+    <!-- Ваши курсы слева -->
+    <div class="user-courses">
+        <h2>Менің курстарым</h2>
+        {% if user_courses %}
+            <div class="courses-list">
+                {% for user_course in user_courses %}
+                    <div class="course-card">
+                        {% if user_course.course.image %}
+                            <img src="{{ user_course.course.image.url }}" alt="{{ user_course.course.title }}">
+                        {% endif %}
+                        <div class="course-info">
+                            <h3>{{ user_course.course.title }}</h3>
+                            <p>Прогресс: {{ user_course.progress|floatformat:0 }}%</p>
+                                <div class="progress-container">
+                                    <div class="progress-bar"
+                                         style="width: {{ user_course.progress|default:0|floatformat:0 }}%;">
+                                        {{ user_course.progress|default:0|floatformat:0 }}%
+                                    </div>
+                                  </div>
+                                {% if user_course.progress == 0 %}
+                                    <a href="{% url 'course_learn' user_course.course.id %}" class="btn">Курсты бастау</a>
+                                {% else %}
+                                    <a href="{% url 'course_learn' user_course.course.id %}" class="btn">Курсты жалғастыру</a>
+                                {% endif %}
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Сіз әлі бірде-бір курс қоспадыңыз.</p>
+        {% endif %}
+    </div>
+</section>
+
+
+
+
+
+
+	{% include "partials/footer.html" %}
+
+<script src="{% static 'JS/index.js' %}"></script>
+</body>
+
+</html>
