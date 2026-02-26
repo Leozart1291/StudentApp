@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Ввести код — Жестикуляция{% endblock %}
+
+{% block content %}
+<div class="auth-container" style="max-width: 500px;">
+    <div class="auth-card">
+        <div class="auth-header" style="text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 1rem;"></div>
+            <h2>Код доступа</h2>
+            <p>Введите код, который сообщил учитель</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('enter_code') }}">
+            <div class="form-group" style="text-align: center;">
+                <input type="text" id="code" name="code" class="form-control" required placeholder="ABC123"
+                    maxlength="6"
+                    style="font-size: 2rem; letter-spacing: 0.5rem; text-align: center; text-transform: uppercase; height: 80px;"
+                    autocomplete="off">
+                <small class="form-hint" style="display: block; margin-top: 0.5rem;">6 символов (буквы и цифры)</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Присоединиться</button>
+        </form>
+
+        <div style="margin: 2rem 0; position: relative; text-align: center;">
+            <hr style="border: 0; border-top: 1px solid var(--border);">
+            <span
+                style="background: var(--surface); padding: 0 1rem; color: var(--text-muted); position: relative; top: -14px;">или</span>
+        </div>
+
+        <div class="text-center">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;"></div>
+            <p>Отсканируйте QR-код с экрана учителя</p>
+        </div>
+
+        <div class="mt-4 text-center">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary btn-sm">Вернуться назад</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const codeInput = document.getElementById('code');
+        if (codeInput) {
+            codeInput.addEventListener('input', function (e) {
+                this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            });
+            codeInput.focus();
+        }
+    });
+</script>
+{% endblock %}

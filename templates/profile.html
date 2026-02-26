@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}Мои уроки{% endblock %}
+
+{% block content %}
+<div class="lessons-wrapper">
+
+    <h1 class="lessons-title">Мои уроки</h1>
+
+    <!-- ✅ Форма добавления (скрыта) -->
+    <div id="addLessonForm" class="lesson-add-form" style="display:none; padding: 20px 20px; border: 2px solid #0255A5; border-radius: 10px;">
+        <form method="POST" action="{{ url_for('profile') }}">
+            <input type="hidden" name="action" value="add_lesson">
+
+            <div class="form-group">
+                <label>Название урока</label>
+                <input type="text" name="lesson_title" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>Описание</label>
+                <textarea name="lesson_description" class="form-control" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Задания</label>
+                <textarea name="lesson_tasks" class="form-control" rows="4"
+                    placeholder="Каждое задание с новой строки"></textarea>
+            </div>
+
+            <div class="lesson-form-actions">
+                <button type="submit" class="lesson-add-btn">Создать</button>
+                <button type="button" class="lesson-edit-btn" id="cancelAddLessonBtn">Отмена</button>
+            </div>
+        </form>
+    </div>
+
+    {% if teacher_lessons %}
+    <div class="lessons-grid" id="lessonsGrid">
+        {% for lesson in teacher_lessons %}
+        <div class="lesson-card">
+            <h3 class="lesson-title">{{ lesson.title }}</h3>
+            <p class="lesson-description">{{ lesson.description }}</p>
+
+            <div class="lesson-footer">
+                <span class="lesson-count">{{ lesson.tasks|length }} заданий</span>
+
+                <button class="lesson-edit-btn btn-edit-lesson"
+                        data-lesson-id="{{ lesson.id }}">
+                    Изменить
+                </button>
+            </div>
+
+            <!-- ✅ Форма редактирования (скрыта) -->
+            <div id="editLessonForm{{ lesson.id }}" class="lesson-edit-form" style="display:none;">
+                <form method="POST" action="{{ url_for('profile') }}">
+                    <input type="hidden" name="action" value="edit_lesson">
+                    <input type="hidden" name="lesson_id" value="{{ lesson.id }}">
+
+                    <div class="form-group">
+                        <label>Название</label>
+                        <input type="text" name="lesson_title" value="{{ lesson.title }}" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Описание</label>
+                        <textarea name="lesson_description" class="form-control" rows="3" required>{{ lesson.description }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Задания</label>
+                       <textarea name="lesson_tasks" class="form-control" rows="8" placeholder="Каждое задание с новой строки">{% for t in lesson.tasks %}{{ t.content if t is mapping and 'content' in t else t }}{% if not loop.last %}&#10;{% endif %}{% endfor %}</textarea>
+                    </div>
+
+                    <div class="lesson-form-actions">
+                        <button type="submit" class="lesson-add-btn">Сохранить</button>
+                        <button type="button"
+        class="lesson-edit-btn lesson-cancel-edit"
+        data-lesson-id="{{ lesson.id }}">
+  Отмена
+</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>У вас пока нет уроков.</p>
+    {% endif %}
+
+    <div class="lesson-add-wrapper">
+        <button class="lesson-add-btn" id="addLessonBtn">
+            Добавить урок
+        </button>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const addBtn = document.getElementById('addLessonBtn');
+  const addForm = document.getElementById('addLessonForm');
+  const cancelAdd = document.getElementById('cancelAddLessonBtn');
+  const lessonsGrid = document.getElementById('lessonsGrid');
+
+  function hideLessonsList(hide) {
+    if (!lessonsGrid) return;
+    lessonsGrid.style.display = hide ? 'none' : '';
+  }
+
+  function exitEditing() {
+    // закрываем все edit формы
+    document.querySelectorAll('.lesson-edit-form').forEach(f => f.style.display = 'none');
+
+    // снимаем расширение
+    document.querySelectorAll('.lesson-card').forEach(card => card.classList.remove('is-editing'));
+
+    // возвращаем остальные карточки
+    if (lessonsGrid) lessonsGrid.classList.remove('is-editing');
+  }
+
+  // ===== Добавить урок =====
+  if (addBtn && addForm) {
+    addBtn.addEventListener('click', () => {
+      const isOpen = (addForm.style.display !== 'none' && addForm.style.display !== '');
+
+      // при добавлении закрываем редактирование
+      exitEditing();
+
+      if (!isOpen) {
+        addForm.style.display = 'block';
+        hideLessonsList(true);
+        addForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        addForm.style.display = 'none';
+        hideLessonsList(false);
+      }
+    });
+  }
+
+  if (cancelAdd && addForm) {
+    cancelAdd.addEventListener('click', () => {
+      addForm.style.display = 'none';
+      hideLessonsList(false);
+    });
+  }
+
+  // ===== Изменить урок =====
+  document.querySelectorAll('.btn-edit-lesson').forEach(btn => {
+    btn.addEventListener('click', function () {
+      // закрыть форму добавления если открыта
+      if (addForm) addForm.style.display = 'none';
+      hideLessonsList(false);
+
+      const id = this.dataset.lessonId;
+      const form = document.getElementById('editLessonForm' + id);
+      if (!form) return;
+
+      const card = this.closest('.lesson-card');
+      const isOpen = (form.style.display !== 'none' && form.style.display !== '');
+
+      exitEditing();
+
+      if (!isOpen) {
+        form.style.display = 'block';
+        if (card) card.classList.add('is-editing');
+        if (lessonsGrid) lessonsGrid.classList.add('is-editing');
+        card?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // ===== Отмена редактирования =====
+  document.querySelectorAll('.lesson-cancel-edit').forEach(btn => {
+    btn.addEventListener('click', () => {
+      exitEditing();
+    });
+  });
+});
+</script>
+{% endblock %}

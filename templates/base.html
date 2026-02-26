@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Жестикуляция{% endblock %}</title>
+    
+    <!-- Google Fonts: Inter -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+		rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link href="bootstrap.css" rel="stylesheet">
+    <!-- Emoji/Icons fallback (using system emoji or material symbols if needed) -->
+    
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% block page_css %}{% endblock %}
+    {% block head %}{% endblock %}
+</head>
+<body>
+    {% set DJANGO_BASE = "http://127.0.0.1:8000" %}
+
+<nav>
+  <div class="centr">
+    <div class="ele">
+      <div class="ff">
+        <div class="header-logo">
+          <div class="brand">
+            <!-- Django главная: выйти из iframe -->
+            <a href="{{ DJANGO_BASE }}/" target="_top">
+              <img class="logo_img" src="{{ url_for('static', filename='images/StudentApp.png') }}" alt="">
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-container">
+          <div class="nav-links">
+            <!-- Django главная -->
+            <a href="{{ DJANGO_BASE }}/" target="_top" class="nav-link">Басты</a>
+
+            <!-- Django courses -->
+            <a href="{{ DJANGO_BASE }}/courses/" target="_top" class="nav-link">Курстар</a>
+
+            <!-- Django profile -->
+            <a href="{{ DJANGO_BASE }}/Profile/" target="_top" class="nav-link">Профиль</a>
+
+            <!-- Flask lessons = Flask главная -->
+            <a href="{{ url_for('index') }}" class="nav-link active">Уроки</a>
+
+            <!-- Панель учителя (если у тебя во Flask есть session.role) -->
+            {% if session.get('user_id') and session.get('role') == "teacher" %}
+              <a href="{{ DJANGO_BASE }}/teacher/students/" target="_top" class="nav-link">Панель учителя</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="button-container">
+        {% if session.get('user_id') %}
+          <div class="profile-menu-container">
+            <button id="profileBtn" class="btn-white profile-link" type="button">
+              <!-- Если фото нет — просто дефолт -->
+              <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Аватар" class="avatar">
+              {{ session.get('username', 'User') }}
+            </button>
+
+            <div id="dropdownMenu" class="dropdown-menu">
+              <div class="dropdown-header">
+                <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Аватар" class="menu-avatar">
+                <div class="user-info">
+                  <strong>{{ session.get('username', 'User') }}</strong><br>
+                  <small>{{ session.get('email', '') }}</small>
+                </div>
+              </div>
+              <hr>
+
+              <!-- Все пункты, которые должны открывать Django, делаем target="_top" -->
+              <a href="{{ DJANGO_BASE }}/" target="_top">Басты бет</a>
+              <a href="{{ DJANGO_BASE }}/Profile/" target="_top">Менің профилім</a>
+              <a href="{{ DJANGO_BASE }}/profile/settings/" target="_top">Баптаулар</a>
+              <a href="{{ DJANGO_BASE }}/sertificates/" target="_top">Сертификаттар</a>
+
+              <!-- Выход: если ты хочешь выходить из Django, веди на Django logout -->
+              <a href="{{ DJANGO_BASE }}/logout/" target="_top" class="vihod">Шығу</a>
+
+              <!-- Если хочешь выходить из Flask-сессии, тогда делай так:
+              <a href="{{ url_for('logout') }}" class="vihod">Шығу</a>
+              -->
+            </div>
+          </div>
+        {% else %}
+          <!-- Логин лучше открывать Django-логин с выходом из iframe -->
+          <a href="{{ url_for('login') }}" target="_top" id="authBtn" class="btn-white1">Кіру</a>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</nav>
+
+<script>
+  (function () {
+    const btn = document.getElementById('profileBtn');
+    const menu = document.getElementById('dropdownMenu');
+
+    if (!btn || !menu) return;
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menu.classList.toggle('open');
+    });
+
+    document.addEventListener('click', () => {
+      menu.classList.remove('open');
+    });
+
+    menu.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  })();
+</script>
+    
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </main>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
+
+
+
+
+{#<nav>#}
+{#    <div class="centr">#}
+{#      <div class="ele">#}
+{#        <div class="ff">#}
+{#          <div class="header-logo">#}
+{#            <div class="brand">#}
+{#              <a href="{{ url_for('index') }}">#}
+{#                <img class="logo_img" src="{{ url_for('static', filename='images/StudentApp.png') }}" alt="">#}
+{#              </a>#}
+{#            </div>#}
+{#          </div>#}
+{##}
+{#          <div class="nav-container">#}
+{#            <div class="nav-links">#}
+{#              <a href="{{ url_for('index') }}"#}
+{#                 class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">Басты</a>#}
+{##}
+{#              <a href="http://127.0.0.1:8000/profile/">Менің профилім</a>#}
+{#                <a href="http://127.0.0.1:8000/profile_settings/">Баптаулар</a>#}
+{#                <a href="http://127.0.0.1:8000/sertificates/">Сертификаттар</a>#}
+{##}
+{##}
+{##}
+{#              <a href="{{ url_for('lessons') }}"#}
+{#                 class="nav-link {% if request.endpoint == 'lesson' %}active{% endif %}">Уроки</a>#}
+{##}
+{#              {% if current_user.is_authenticated and current_user.role == "teacher" %}#}
+{#                <a href="{{ url_for('teacher_students_list') }}"#}
+{#                   class="nav-link {% if request.endpoint == 'teacher_students_list' %}active{% endif %}">#}
+{#                  Панель учителя#}
+{#                </a>#}
+{#              {% endif %}#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{##}
+{#        <div class="button-container">#}
+{#          {% if current_user.is_authenticated %}#}
+{#            <div class="profile-menu-container">#}
+{#              <button id="profileBtn" class="btn-white profile-link" type="button">#}
+{#                {% if current_user.photo_url %}#}
+{#                  <img src="{{ current_user.photo_url }}" alt="Фото профиля" class="avatar">#}
+{#                {% else %}#}
+{#                  <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Аватар" class="avatar">#}
+{#                {% endif %}#}
+{#                {{ current_user.username }}#}
+{#              </button>#}
+{##}
+{#              <div id="dropdownMenu" class="dropdown-menu">#}
+{#                <div class="dropdown-header">#}
+{#                  {% if current_user.photo_url %}#}
+{#                    <img src="{{ current_user.photo_url }}" alt="Фото профиля" class="menu-avatar">#}
+{#                  {% else %}#}
+{#                    <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Аватар" class="menu-avatar">#}
+{#                  {% endif %}#}
+{##}
+{#                  <div class="user-info">#}
+{#                    <strong>{{ current_user.username }}</strong><br>#}
+{#                    <small>{{ current_user.email }}</small>#}
+{#                  </div>#}
+{#                </div>#}
+{#                <hr>#}
+{##}
+{#                <a href="{{ url_for('index') }}">Басты бет</a>#}
+{#                <a href="http://127.0.0.1:8000/profile/">Менің профилім</a>#}
+{#                <a href="http://127.0.0.1:8000/profile_settings/">Баптаулар</a>#}
+{#                <a href="http://127.0.0.1:8000/sertificates/">Сертификаттар</a>#}
+{##}
+{#                <!-- logout лучше через POST -->#}
+{#                <form method="post" action="{{ url_for('http://127.0.0.1:8000/logout/') }}">#}
+{#                  <button class="vihod" type="submit">Шығу</button>#}
+{#                </form>#}
+{#              </div>#}
+{#            </div>#}
+{#          {% else %}#}
+{#            <a href="{{ url_for('login') }}" id="authBtn" class="btn-white1">Кіру</a>#}
+{#          {% endif %}#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </nav>#}

@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}{% if lesson %}{{ lesson.title }}{% else %}Урок{% endif %}{% endblock %}
+
+{% block content %}
+    {% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/lesson.css') }}">
+<link href="bootstrap.css" rel="stylesheet">
+{% endblock %}
+
+
+<div class="lesson-room">
+    <!-- Left Column: Video & Content -->
+    <div class="video-area">
+        <!-- Main Video Container (ограниченная высота) -->
+    <div class="cameraflex">
+        <div class="main-video-container">
+            <!-- Camera / Video Area: у учителя — своя камера, у ученика — кадр с сервера -->
+            <div id="teacherCameraArea" class="teacher-video-wrap">
+                <div class="camera-placeholder" id="cameraPlaceholder">
+                    <div class="camera-placeholder-icon"></div>
+                    <p>Камера учителя</p>
+                    <button class="btn btn-primary" id="startCameraBtn">Включить камеру</button>
+                </div>
+                <video id="teacherVideo" autoplay playsinline muted class="teacher-video-el"></video>
+                <!-- У учеников: показываем кадр камеры учителя с сервера -->
+                <img id="teacherFrameImage" alt="Камера учителя" class="teacher-frame-img" style="display: none;">
+                <div class="camera-controls" id="cameraControls">
+                    <button class="btn btn-sm btn-danger" id="stopCameraBtn">Выключить</button>
+                    <button class="btn btn-sm btn-primary" id="startSpeechBtn">Распознавание</button>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Gesture Animation Container -->
+        <div class="card gesture-card">
+            <video id="gestureVideo" class="gesture-video-player" autoplay muted playsinline></video>
+            <div class="gesture-content" id="gestureContent">
+                <div id="word-display"></div>
+                <div id="gesture-display"></div>
+            </div>
+        </div>
+    </div>
+        <!-- Субтитры: закреплены сразу под жестами; кнопка «Распознавание» без камеры -->
+        <div id="subtitles-container" class="subtitles-fixed">
+            <strong>Субтитры:</strong> <span id="subtitles-text"></span>
+            <button type="button" id="startSpeechBtnSubtitle" class="btn btn-sm btn-primary subtitles-recognition-btn">Распознавание</button>
+            <small class="subtitles-hint" style="width:100%; margin-top:4px; color:var(--text-muted); font-size:0.75rem;">Chrome: только HTTPS или localhost. Браузер микрофонға рұқсат сұрайды.</small>
+        </div>
+
+        <!-- Lesson Text (скроллируемая область) -->
+        <div class="card lesson-text-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3>{{ lesson.title if lesson else 'Текст урока' }}</h3>
+            </div>
+
+            {% if lesson %}
+            <p id="lesson-description-p">{{ lesson.description }}</p>
+
+            {% if lesson.get('tasks') %}
+            <div class="mt-4 p-4 tasks-block">
+                <h4>Задания</h4>
+                <ul class="tasks-list">
+                    {% for task in lesson.tasks %}
+                    <li class="task-item" data-task-id="{{ loop.index0 }}">
+                        {% if task is mapping %}
+                        {% if task.type == 'test' %}
+                        <div class="task-test" data-question="{{ task.question|e }}" data-correct="{{ task.get('correct')|e if task.get('correct') is not none else '' }}" data-options="{{ (task.get('options') or [])|tojson|e }}">
+                            <span class="task-test-question">{{ task.question }}</span>
+                            <div class="task-test-options"></div>
+                            <button type="button" class="btn btn-sm btn-primary task-test-submit">Ответить</button>
+                            <div class="task-test-result" style="display: none;"></div>
+                            {% if task.get('file_url') %}
+                            <a href="{{ task.file_url if (task.file_url or '')[:4] == 'http' else url_for('get_upload_file', filename=task.file_url) }}" class="task-file-link" download target="_blank" rel="noopener">Скачать файл</a>
+                            {% endif %}
+                        </div>
+                        {% elif task.type == 'text' %}
+                        {{ task.content }}
+                        {% if task.get('file_url') %}
+                        <a href="{{ task.file_url if (task.file_url or '')[:4] == 'http' else url_for('get_upload_file', filename=task.file_url) }}" class="task-file-link" download target="_blank" rel="noopener">Скачать файл</a>
+                        {% endif %}
+                        {% else %}{{ task }}{% endif %}
+                        {% else %}{{ task }}{% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            {% endif %}
+
+{#            <div id="ai-explanation-container" class="alert alert-info mt-4" style="display: none;">#}
+{#                <h5>Объяснение жестов</h5>#}
+{#                <div id="aiExplanationOriginal" style="display: none;"></div>#}
+{#                <div id="aiExplanationText"></div>#}
+{#            </div>#}
+        </div>
+    </div>
+
+    <!-- Right Column: Chat -->
+    <div class="lesson-sidebar">
+        <div class="chat-container">
+            <div class="chat-header d-flex" style="justify-content: space-between;">
+                <span>Чат</span>
+                <button class="btn btn-sm btn-secondary" id="studentsToggleBtn">Участники</button>
+            </div>
+
+            <!-- Students List Overlay -->
+            <div id="studentsPanel"
+                style="display: none; padding: 1rem; background: var(--bg-surface); border-bottom: 1px solid var(--border);">
+                <h5>Участники</h5>
+                <div id="studentsList"></div>
+                <button class="btn btn-sm btn-secondary w-100 mt-2" id="closeStudentsBtn">Закрыть</button>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <!-- Messages populated by JS -->
+            </div>
+
+            <div class="message-input">
+                <input type="text" id="messageInput" class="form-control" placeholder="Сообщение...">
+                <button id="sendButton" class="btn btn-primary">Отправить</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    {% if lesson %}
+    const lessonData = { title: {{ lesson.title|tojson }}, description: {{ lesson.description|tojson }} };
+    {% endif %}
+    {% if access_code %} const lessonAccessCode = {{ access_code|tojson }}; {% endif %}
+    {% if current_user %}
+    const currentUserId = {{ current_user.id|tojson }};
+    const currentUserRole = {{ (current_user.role or '')|tojson }};
+    window.currentUserId = currentUserId;
+    window.currentUserRole = currentUserRole;
+    {% else %}
+    const currentUserId = null;
+    const currentUserRole = '';
+    window.currentUserId = currentUserId;
+    window.currentUserRole = currentUserRole;
+    {% endif %}
+</script>
+    <script>
+    const placeholder = document.getElementById('cameraPlaceholder');
+const controls = document.getElementById('cameraControls');
+
+function showControls(){
+  controls.classList.remove('hidden');
+  placeholder.style.display = 'none';
+}
+function hideControls(){
+  controls.classList.add('hidden');
+  placeholder.style.display = 'grid';
+}
+    </script>
+<script src="{{ url_for('static', filename='js/lesson.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация — Жестикуляция{% endblock %}
+
+{% block content %}
+<div class="auth-container" style="max-width: 500px;">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2>Регистрация</h2>
+            <p>Создайте новый аккаунт</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('register') }}">
+            <div class="form-group">
+                <label for="username">Имя пользователя</label>
+                <input type="text" id="username" name="username" class="form-control" required
+                    placeholder="Придумайте логин">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" required
+                    placeholder="example@mail.com">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" name="password" class="form-control" required
+                    placeholder="Минимум 6 символов">
+            </div>
+
+            <div class="form-group">
+                <label>Выберите роль</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
+                    <label style="cursor: pointer;">
+                        <input type="radio" name="role" value="teacher" required style="display: none;"
+                            onchange="document.querySelectorAll('.role-select-box').forEach(el => el.style.borderColor='var(--border)'); this.parentElement.querySelector('.role-select-box').style.borderColor='var(--primary)';">
+                        <div class="role-select-box"
+                            style="border: 2px solid var(--border); border-radius: var(--radius-md); padding: 1rem; text-align: center; transition: var(--transition);">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;"></div>
+                            <div style="font-weight: 600;">Учитель</div>
+                        </div>
+                    </label>
+                    <label style="cursor: pointer;">
+                        <input type="radio" name="role" value="student" style="display: none;"
+                            onchange="document.querySelectorAll('.role-select-box').forEach(el => el.style.borderColor='var(--border)'); this.parentElement.querySelector('.role-select-box').style.borderColor='var(--primary)';">
+                        <div class="role-select-box"
+                            style="border: 2px solid var(--border); border-radius: var(--radius-md); padding: 1rem; text-align: center; transition: var(--transition);">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;"></div>
+                            <div style="font-weight: 600;">Ученик</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Зарегистрироваться</button>
+        </form>
+
+        <div class="mt-4 text-center">
+            <p style="font-size: 0.9rem;">Уже есть аккаунт? <a href="{{ url_for('login') }}"
+                    style="color: var(--primary);">Войти</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
